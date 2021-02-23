@@ -24,12 +24,12 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '37517fb900e4d704b9a12d612e170894a112e8ab',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -508,12 +508,12 @@ private static $installed = array (
     ),
     'laravel/laravel' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '37517fb900e4d704b9a12d612e170894a112e8ab',
     ),
     'laravel/passport' => 
     array (
@@ -544,12 +544,12 @@ private static $installed = array (
     ),
     'laravel/socialite' => 
     array (
-      'pretty_version' => 'v5.2.0',
-      'version' => '5.2.0.0',
+      'pretty_version' => 'v5.2.1',
+      'version' => '5.2.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c0c85cccdad53e1916b9ba27c95daaaec591d113',
+      'reference' => '8aa705d771f127317f60887515cfb2f777653ce5',
     ),
     'laravel/tinker' => 
     array (
