@@ -35,7 +35,7 @@ class QuestionController extends BaseController
             'user_id' => 'required',
             'outproduct_id' => 'required',
             'question' => 'required',
-            'answer' => 'required',
+            'answer' => '',
         ]);
 
         if($validator->fails()){
