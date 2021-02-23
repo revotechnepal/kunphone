@@ -29,6 +29,7 @@ use App\Http\Controllers\API\ExchangeConfirmController;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::resource('sliders', SliderController::class);
 
 Route::middleware('auth:api')->group( function () {
     Route::resource('brands', BrandController::class);
@@ -42,6 +43,6 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('questions', QuestionController::class);
     Route::resource('reviews', ReviewController::class);
     Route::resource('settings', SettingController::class);
-    Route::resource('sliders', SliderController::class);
+
 
 });
