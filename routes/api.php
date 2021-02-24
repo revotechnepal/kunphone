@@ -22,6 +22,8 @@ use App\Http\Controllers\API\OrderStatusController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\IncomingProductController;
 use App\Http\Controllers\API\OutgoingProductController;
+use App\Http\Controllers\API\BlogCategoryController;
+use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\UsedProductController;
 
 use App\Http\Controllers\API\ExchangeConfirmController;
@@ -48,6 +50,9 @@ Route::resource('outgoingproducts', OutgoingProductController::class);
 Route::resource('usedproducts', UsedProductController::class);
 Route::resource('orderstatus', OrderStatusController::class);
 Route::resource('products', ProductController::class);
+Route::resource('blogcategory', BlogCategoryController::class);
+Route::resource('blogs', BlogController::class);
+
 Route::get('questions', [QuestionController::class, 'index']);
 Route::get('reviews', [ReviewController::class, 'index']);
 
