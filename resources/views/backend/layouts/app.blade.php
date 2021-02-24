@@ -65,7 +65,7 @@
                                         <span class="badge bg-danger">1</span>
                                     @elseif ($newuser == 0 && $incomingproduct == 0 && $neworder == 0 && $exchangeorder > 0)
                                         <span class="badge bg-danger">1</span>
-    
+
                                     @elseif  ($incomingproduct > 0 && $neworder >0 && $newuser == 0 && $exchangeorder == 0)
                                         <span class="badge bg-danger">2</span>
                                     @elseif  ($incomingproduct > 0 && $newuser >0 && $neworder == 0 && $exchangeorder == 0)
@@ -78,7 +78,7 @@
                                         <span class="badge bg-danger">2</span>
                                     @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct == 0 && $neworder == 0)
                                         <span class="badge bg-danger">2</span>
-    
+
                                         @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct > 0 && $neworder == 0)
                                         <span class="badge bg-danger">3</span>
                                         @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct == 0 && $neworder > 0)
@@ -87,14 +87,14 @@
                                         <span class="badge bg-danger">3</span>
                                         @elseif  ($newuser == 0 and $exchangeorder > 0 && $incomingproduct > 0 && $neworder > 0)
                                         <span class="badge bg-danger">3</span>
-    
-    
+
+
                                     @elseif  ($incomingproduct > 0 && $newuser > 0 && $neworder > 0 && $exchangeorder > 0)
                                         <span class="badge bg-danger">4</span>
                                     @else
                                         <span class="badge bg-danger">0</span>
                                     @endif
-    
+
                                 </a>
                             @endif
 
@@ -269,6 +269,16 @@
 								<ul class="nav">
                                     <li><a href="{{route('admin.order.index')}}" class="">View Orders</a></li>
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="">View Exchange Orders</a></li>
+								</ul>
+							</div>
+                        </li>
+
+                        <li>
+							<a href="#subPaged3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-layers"></i><span>Blogs</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPaged3" class="collapse ">
+								<ul class="nav">
+                                    <li><a href="{{route('admin.blogcategory.index')}}" class="">Blog Categories</a></li>
+                                    <li><a href="{{route('admin.blog.index')}}" class="">Our Blogs</a></li>
 								</ul>
 							</div>
                         </li>

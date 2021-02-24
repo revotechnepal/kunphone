@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ExchangeConfirmController;
 use App\Http\Controllers\ExchangeOrderController;
@@ -149,6 +151,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles']
     Route::resource('vendor', VendorController::class);
     Route::resource('exchangeconfirm', ExchangeConfirmController::class);
     Route::resource('faqs', FaqController::class);
+    Route::resource('blogcategory', BlogCategoryController::class);
+    Route::resource('blog', BlogController::class);
+
+
 
 });
 Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles'], 'roles'=>['admin','vendor']], function(){
