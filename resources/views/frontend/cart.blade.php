@@ -65,11 +65,21 @@
                                         <tr class="text-center">
                                             <td class="product-remove"><a href="{{route('removecart', $product->id)}}"><span class="ion-ios-close"></span></a></td>
 
-                                            <td class="image-prod"><img src="{{Storage::disk('uploads')->url($cartproduct->modelimage)}}" alt="" style="max-height: 100px;"></td>
+                                            <td class="image-prod">
+                                                <img src="{{Storage::disk('uploads')->url($cartproduct->modelimage)}}" alt="" style="max-height: 100px;">
+                                                @if ($outgoingproduct->condition == 'used')
+                                                    <p class="mt-2">(Used Phone)</p>
+                                                @else
+                                                    <p class="mt-2">(New Phone)</p>
+                                                @endif
+                                            </td>
 
                                             <td class="product-name">
                                                 <h3>{{$cartproduct->name}}</h3>
                                                 <p>{{$product->ram}} / {{$product->rom}}</p>
+                                                @if ($outgoingproduct->condition == 'used')
+                                                    <p>(SKU: {{$outgoingproduct->sku}})</p>
+                                                @endif
                                             </td>
 
                                             <td class="price">Rs. {{$product->price}}</td>

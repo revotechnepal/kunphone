@@ -42,7 +42,7 @@
                                         <tr>
                                             <td>{{$order->id}}</td>
                                             <td>{{$order->orderStatus->status}}</td>
-                                            <td>{{date('F d Y', strtotime($order->created_at))}}</td>
+                                            <td>{{date('F d, Y', strtotime($order->created_at))}}</td>
                                             <td>
                                                 <a href="#" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong{{$order->id}}">View Order</a>
                                                     @if ($order->order_status_id == 1 || $order->order_status_id == 2 || $order->order_status_id == 3)
@@ -50,7 +50,7 @@
                                                     @endif
 
                                                     <div class="modal fade" id="exampleModalLong{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
+                                                        <div class="modal-dialog" role="document" style="max-width: 700px;">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                 <h5 class="modal-title" id="exampleModalLongTitle">Order Id -> {{$order->id}}</h5>
@@ -64,13 +64,13 @@
                                                                         <table class="table" id="myTable">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Model Image</th>
-                                                                                    <th>Model Name</th>
-                                                                                    <th>Quantity</th>
-                                                                                    <th>Unit Price</th>
-                                                                                    <th>Total</th>
+                                                                                    <th style="font-weight: bold;">Model Image</th>
+                                                                                    <th style="font-weight: bold;">Model Name</th>
+                                                                                    <th style="font-weight: bold;">Quantity</th>
+                                                                                    <th style="font-weight: bold;">Unit Price</th>
+                                                                                    <th style="font-weight: bold;">Total</th>
                                                                                     @if ($order->orderStatus->status == "Delivered")
-                                                                                        <th>Review</th>
+                                                                                        <th style="font-weight: bold;">Review</th>
                                                                                     @endif
                                                                                 </tr>
                                                                             </thead>
@@ -85,8 +85,23 @@
                                                                                             $outgoingproduct = DB::table('product_outgoings')->where('id', $productorder->product_id)->first();
                                                                                             $product = DB::table('products')->where('id', $outgoingproduct->product_id)->first();
                                                                                         @endphp
-                                                                                        <td><img src="{{Storage::disk('uploads')->url($product->modelimage)}}" alt="" style="max-height: 100px;"></td>
-                                                                                        <td>{{$product->name}}</td>
+                                                                                        <td>
+                                                                                            <img src="{{Storage::disk('uploads')->url($product->modelimage)}}" alt="" style="max-height: 100px;">
+                                                                                            {{-- @if ($outgoingproduct->condition == 'used')
+                                                                                                <p class="mt-2">(Used Phone)</p>
+                                                                                            @else
+                                                                                                <p class="mt-2">(New Phone)</p>
+                                                                                            @endif --}}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <b>{{$product->name}}</b>
+                                                                                            @if ($outgoingproduct->condition == 'used')
+                                                                                                <p class="mt-2">(Used Phone)<br>
+                                                                                                (SKU: {{$outgoingproduct->sku}})</p>
+                                                                                            @else
+                                                                                                <p class="mt-2">(New Phone)</p>
+                                                                                            @endif
+                                                                                        </td>
                                                                                         <td>{{$productorder->quantity}}</td>
                                                                                         <td>{{$productorder->price}}</td>
                                                                                         <td>
@@ -101,7 +116,7 @@
 
                                                                                             @if (empty($userreview))
                                                                                                 <button type="button" class="btn btn-info py-3 px-4" data-toggle="modal" data-target="#reviewModal{{$order->id . $productorder->product_id}}">Add</button>
-                                                                                                 
+
                                                                                                 <div class="modal fade" id="reviewModal{{$order->id . $productorder->product_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                     <div class="modal-dialog" role="document">
                                                                                                     <div class="modal-content">
@@ -149,7 +164,7 @@
                                                                                                         </form>
                                                                                                     </div>
                                                                                                     </div>
-                                                                                                </div> 
+                                                                                                </div>
 
                                                                                             @else
                                                                                                 <button type="button" class="btn btn-secondary py-3 px-4" data-toggle="modal" data-target="#editreviewModal{{$order->id . $productorder->product_id}}">Edit</button>

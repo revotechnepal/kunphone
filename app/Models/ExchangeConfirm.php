@@ -26,7 +26,7 @@ class ExchangeConfirm extends Model
        'exchangecode',
        'frontimage',
        'backimage',
-       'is_processing',
+       'is_processsing',
     ];
 
     public function user()

@@ -34,7 +34,7 @@
                                     <p><span style="font-weight: bold;">Order Id: </span> {{$order->id}}</p>
                                     <p><span style="font-weight: bold;">Customer Name: </span> {{$order->user->name}}</p>
                                     <p><span style="font-weight: bold;">Email: </span>{{$order->user->email}}</p>
-                                    <p><span style="font-weight: bold;">Ordered Date: </span> {{date('F d Y', strtotime($order->created_at))}}</p>
+                                    <p><span style="font-weight: bold;">Ordered Date: </span> {{date('F d, Y', strtotime($order->created_at))}}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <p><span style="font-weight: bold;">Order Status: </span>{{$order->orderStatus->status}}</p>
@@ -104,7 +104,7 @@
 
                                                 <div class="col-md-12 form-group">
                                                     <label for="description">Delievery description:</label>
-                                                    <textarea name="description" class="form-control" cols="30" rows="10">{{$order->delieveryAddress->description}}</textarea>
+                                                    <textarea name="description" class="form-control" cols="30" rows="10" placeholder="Something....">{{$order->delieveryAddress->description}}</textarea>
                                                 </div>
                                             </div>
                                             <center>
@@ -139,7 +139,15 @@
                                             <button type="submit" class="btn btn-danger btn-sm">X</button>
                                         </form>
                                     </td>
-                                    <td>{{$product->name}}</td>
+                                    <td>
+                                        <b>{{$product->name}}</b>
+                                        @if ($product_outgoing->condition == 'used')
+                                            <p class="mt-2">(Used Phone)<br>
+                                            (SKU: {{$product_outgoing->sku}})</p>
+                                        @else
+                                            <p class="mt-2">(New Phone)</p>
+                                        @endif
+                                    </td>
                                     <td>{{$product_outgoing->ram}} / {{$product_outgoing->rom}}</td>
                                     <td class="qua-col">
 

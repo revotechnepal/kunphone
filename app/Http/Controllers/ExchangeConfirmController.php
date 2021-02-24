@@ -117,7 +117,7 @@ class ExchangeConfirmController extends Controller
     {
         $exchangeorder = ExchangeConfirm::findorFail($id);
         $exchangeorder->update([
-            'is_processing' => 0
+            'is_processsing' => 0
         ]);
         return redirect()->back()->with('success', 'Exchange completed.');
     }

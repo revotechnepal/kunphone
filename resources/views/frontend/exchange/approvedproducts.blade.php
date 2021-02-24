@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="billing-heading text-center">Approved Products for Exchange</h4>
-                            @if ($approvedproducts->count() > 0)   
+                            @if ($approvedproducts->count() > 0)
                                 <p class="text-center">( Exchange with similar valued or more valued price phones..)</p>
                             @endif
                     </div>
@@ -58,13 +58,13 @@
                                                 Rs. {{$approved->price}}
                                             </td>
                                                 @php
-                                                
+
                                                     $initiateddate = $approved->updated_at;
                                                     $initiatedinmilisec = strtotime($initiateddate.'+1 week');
                                                     $today = date('Y-m-d h:i:sa');
                                                     $expiringdate = strtotime($today);
                                                 @endphp
-                                                    
+
                                                     @if($initiatedinmilisec < $expiringdate)
                                                         <td>Code Expired</td>
                                                         <td>Exchange Cancelled</td>
@@ -74,7 +74,7 @@
                                                                 $timeremaining = $initiatedinmilisec - $expiringdate;
                                                                 $timeindays = round($timeremaining / (60 * 60 * 24));
                                                             @endphp
-                                                            
+
                                                             @if($timeindays < 1)
                                                                 (Expires Today)
                                                             @else
@@ -83,7 +83,7 @@
                                                         </td>
                                                         <td><a href='{{route('exchange', ['price' => $approved->price, 'id' => $approved->id])}}' class='btn btn-success py-2 px-4'>Exchange</a>
                                                         </td>
-                                                        
+
                                                     @endif
                                         </tr>
                                     @endforeach
@@ -93,8 +93,8 @@
                         @endif
                     </div>
                 </div>
-                
-                
+
+
                 @if ($exchangedproducts->count() == 0)
 
                 @else
@@ -151,17 +151,17 @@
                                             </td>
 
 
-                                                @if ($exchange->is_processing == 1)
+                                                @if ($exchange->is_processsing == 1)
                                                     @php
                                                         $initiateddate = $exchange->created_at;
                                                         $initiatedinmilisec = strtotime($initiateddate.'+1 week');
                                                         $today = date('Y-m-d h:i:sa');
                                                         $expiringdate = strtotime($today);
                                                     @endphp
-                                                        
+
                                                     @if($initiatedinmilisec < $expiringdate)
                                                         @php
-                                                            DB::update('update exchange_confirms set is_processing = 2 where id = ?', [$exchange->id]);
+                                                            DB::update('update exchange_confirms set is_processsing = 2 where id = ?', [$exchange->id]);
                                                             DB::update('update product_outgoings set quantity = quantity+1 where id = ?', [$exchange->outgoingproduct_id]);
                                                         @endphp
                                                         <td>Code Expired</td>
@@ -171,7 +171,7 @@
                                                                 $timeremaining = $initiatedinmilisec - $expiringdate;
                                                                 $timeindays = round($timeremaining / (60 * 60 * 24));
                                                             @endphp
-                                                            
+
                                                             @if($timeindays < 1)
                                                                 (Expires Today)
                                                             @else
@@ -180,10 +180,10 @@
                                                         </td>
                                                     @endif
                                                     <td>Exchange Processing</td>
-                                                @elseif($exchange->is_processing == 2)
+                                                @elseif($exchange->is_processsing == 2)
                                                     <td>Code Expired</td>
                                                     <td>Exchange Cancelled</td>
-                                                @elseif($exchange->is_processing == 0)
+                                                @elseif($exchange->is_processsing == 0)
                                                     <td><b>{{$exchange->exchangecode}}</b></td>
                                                     <td>Exchange Complete</td>
                                                 @endif

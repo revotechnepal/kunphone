@@ -649,7 +649,7 @@ class FrontController extends Controller
             'exchangecode' => $incomingproduct->exchangecode,
             'frontimage' => $incomingproduct->frontimage,
             'backimage' => $incomingproduct->backimage,
-            'is_processing' => 1,
+            'is_processsing' => 1,
         ]);
         $exchangeorder->save();
         $exchangeorder->notify(new ExchangeOrderNotification($exchangeorder));

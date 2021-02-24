@@ -40,17 +40,17 @@
                                         @endphp
                                         <span style="font-weight: bold;">Appropriate Vendor: </span> {{$vendor->name}}, {{$vendor->address}}, {{$vendor->district}}
                                     </p>
-                                
-                                    @if ($exchangeorder->is_processing == 1)
+
+                                    @if ($exchangeorder->is_processsing == 1)
                                         @php
                                             $initiateddate = $exchangeorder->created_at;
                                             $initiatedinmilisec = strtotime($initiateddate.'+1 week');
                                             $today = date('Y-m-d h:i:sa');
                                             $expiringdate = strtotime($today);
                                         @endphp
-                                                        
+
                                         @if($initiatedinmilisec < $expiringdate)
-                                            DB::update('update exchange_confirms set is_processing = 2 where id = ?', [$exchangeorder->id]);
+                                            DB::update('update exchange_confirms set is_processsing = 2 where id = ?', [$exchangeorder->id]);
                                             DB::update('update product_outgoings set quantity = quantity+1 where id = ?', [$exchangeorder->outgoingproduct_id]);
                                             <p><span style="font-weight: bold;">Exchange Code: </span>  (Code Expired)</p>
                                         @else
@@ -59,7 +59,7 @@
                                                 $timeremaining = $initiatedinmilisec - $expiringdate;
                                                 $timeindays = round($timeremaining / (60 * 60 * 24));
                                             @endphp
-                                                            
+
                                             @if($timeindays < 1)
                                                 (Expires Today)
                                             @else
@@ -70,19 +70,19 @@
                                             <p>
                                                 <span style="font-weight: bold;">Exchange Status:</span>Exchange Processing
                                             </p>
-                                        @elseif($exchangeorder->is_processing == 2)
+                                        @elseif($exchangeorder->is_processsing == 2)
                                             <p><span style="font-weight: bold;">Exchange Code: </span> {{$exchangeorder->exchangecode}}</p>
                                             <p>
                                                 <span style="font-weight: bold;">Exchange Status:</span>Exchange Cancelled
                                             </p>
-                                        @elseif($exchangeorder->is_processing == 0)
+                                        @elseif($exchangeorder->is_processsing == 0)
                                             <p><span style="font-weight: bold;">Exchange Code: </span> {{$exchangeorder->exchangecode}}</p>
                                             <p>
                                                 <span style="font-weight: bold;">Exchange Status:</span>Exchange Complete
                                             </p>
                                     @endif
-                                                
-                                                
+
+
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                                             <tr>
                                                 <td colspan="3" class="text-right"></td>
                                                 <td>
-                                                    @if ($exchangeorder->is_processing == 1)
+                                                    @if ($exchangeorder->is_processsing == 1)
                                                         <form action="{{route('admin.exchangeconfirm.update', $exchangeorder->id)}}" method="POST">
                                                             @csrf
                                                             @method('PUT')

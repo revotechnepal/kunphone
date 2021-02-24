@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="billing-heading text-center">Wishlists of {{Auth::user()->name}}</h4>
-                            
+
                     </div>
                     <div class="card-body">
                         @if ($wishlists->count()<1)
@@ -43,9 +43,17 @@
                                                 $outgoingproduct = DB::table('product_outgoings')->where('id', $wishlist->product_id)->first();
                                                 $product = DB::table('products')->where('id', $outgoingproduct->product_id)->first();
                                             @endphp
-                                            <td><img src="{{Storage::disk('uploads')->url($product->modelimage)}}" style="max-height:100px;" alt=""></td>
                                             <td>
-                                                {{$product->name}}<br>
+                                                <img src="{{Storage::disk('uploads')->url($product->modelimage)}}" style="max-height:100px;" alt="">
+                                                    @if ($outgoingproduct->condition == 'used')
+                                                        <p class="mt-2">(Used Phone)<br>
+                                                        (SKU: {{$outgoingproduct->sku}})</p>
+                                                    @else
+                                                        <p class="mt-2">(New Phone)</p>
+                                                    @endif
+                                            </td>
+                                            <td>
+                                                <b>{{$product->name}}</b><br>
                                                 ( {{$outgoingproduct->ram}} / {{$outgoingproduct->rom}} )
                                             </td>
                                             <td><a href="{{route('product', ['id' => $outgoingproduct->id, 'slug' => $product->slug])}}" class="btn btn-success py-2 px-4">View</a>
