@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\BlogImages;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
@@ -42,10 +44,6 @@ class BlogController extends Controller
                     $date = date('Y/m/d h:m a', strtotime($row->date));
                     return $date;
                 })
-                ->addColumn('details', function($row){
-                    $details = substr($row->details, 0, 16) .  '....';
-                    return $details;
-                })
                 ->addColumn('action', function($row){
                     $showurl = route('admin.blog.show', $row->id);
                     $editurl = route('admin.blog.edit', $row->id);
@@ -62,7 +60,7 @@ class BlogController extends Controller
 
                             return $btn;
                 })
-                ->rawColumns(['image', 'category', 'date', 'details', 'action'])
+                ->rawColumns(['image', 'category', 'date', 'action'])
                 ->make(true);
         }
         return view('backend.blogs.index');
@@ -77,7 +75,8 @@ class BlogController extends Controller
     {
         //
         $blogCategories = BlogCategory::latest()->get();
-        return view('backend.blogs.create', compact('blogCategories'));
+        $images = BlogImages::where('user_id',Auth::user()->id)->where('blog_id',0)->get();
+        return view('backend.blogs.create', compact('blogCategories', 'images'));
     }
 
     /**
@@ -89,6 +88,24 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         //
+
+        if ($request->ajax()) {
+            $this->validate($request,[
+                'file'=>'required|max:500'
+            ]);
+
+            $name = $request->file->store('blog_images','uploads');
+
+            $i = new BlogImages;
+            $i->location = $name;
+            $i->blog_id = 0;
+            $i->user_id = Auth::user()->id;
+            $i->title = '';
+            $i->save();
+
+            return response()->json(['url'=>Storage::disk('uploads')->url($name),'id'=>$i->id]);
+        };
+
         $data = $this->validate($request, [
             'title'=>'required',
             'image'=>'required|mimes:png,jpg,jpeg',
@@ -109,6 +126,14 @@ class BlogController extends Controller
                     'details'=>$data['details'],
                 ]);
                 $blog->save();
+
+
+                $images = BlogImages::where('user_id',Auth::user()->id)->where('blog_id',0)->get();
+            foreach($images as $image){
+                $image->title = $data['title'];
+                $image->blog_id = $blog->id;
+                $image->save();
+            }
         }
 
         return redirect()->route('admin.blog.index')->with('success', 'Blog Created Successfully');
@@ -161,6 +186,34 @@ class BlogController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $blogImages = BlogImages::where('blog_id', $id)->get();
+        if(count($blogImages) > 0)
+        {
+            foreach ($blogImages as $blogImage) {
+                Storage::disk('uploads')->delete($blogImage->location);
+                $blogImage->delete();
+            }
+        }
+
+        if ($request->ajax()) {
+            $this->validate($request,[
+                'file'=>'required|max:500'
+            ]);
+
+            $name = $request->file->store('blog_images','uploads');
+
+            $i = new BlogImages;
+            $i->location = $name;
+            $i->blog_id = 0;
+            $i->user_id = Auth::user()->id;
+            $i->title = '';
+            $i->save();
+
+            return response()->json(['url'=>Storage::disk('uploads')->url($name),'id'=>$i->id]);
+
+        };
+
         $blog = Blog::findorfail($id);
         $data = $this->validate($request, [
             'title'=>'required',
@@ -187,6 +240,13 @@ class BlogController extends Controller
             'details'=>$data['details'],
         ]);
 
+        $images = BlogImages::where('user_id',Auth::user()->id)->where('blog_id',0)->get();
+            foreach($images as $image){
+                $image->title = $data['title'];
+                $image->blog_id = $blog->id;
+                $image->save();
+            }
+
         return redirect()->route('admin.blog.index')->with('success', 'Blog Contents Updated');
     }
 
@@ -202,6 +262,15 @@ class BlogController extends Controller
         $blog = Blog::findorfail($id);
         Storage::disk('uploads')->delete($blog->image);
         $blog->delete();
+
+        $blogImages = BlogImages::where('blog_id', $id)->get();
+        if(count($blogImages) > 0)
+        {
+            foreach ($blogImages as $blogImage) {
+                Storage::disk('uploads')->delete($blogImage->location);
+                $blogImage->delete();
+            }
+        }
 
         return redirect()->back()->with('success', 'Blog Deleted Successfully');
     }

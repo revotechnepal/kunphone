@@ -37,7 +37,6 @@
                                 <th class="text-center">Image</th>
                                 <th class="text-center">Category</th>
                                 <th class="text-center">Date</th>
-                                <th class="text-center">Details</th>
                                 <th class="text-center">View Count</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -68,7 +67,6 @@
               {data: 'image', name: 'image'},
               {data: 'category', name: 'category'},
               {data: 'date', name: 'date'},
-              {data: 'details', name: 'details'},
               {data: 'view_count', name: 'view_count'},
               {
                   data: 'action',

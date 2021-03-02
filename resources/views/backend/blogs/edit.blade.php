@@ -54,7 +54,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="date">Date:</label>
-                                            <input type="datetime-local" class="form-control" name="date" value="{{@old('date')?@old('date'):$blog->date}}" placeholder="Date">
+                                            <input type="datetime-local" class="form-control datetimepicker" name="date" value="{{@old('date')?@old('date'):$blog->date}}" placeholder="Date">
                                             @error('date')
                                                 <p class="text-danger">{{$message}}</p>
                                             @enderror
@@ -65,7 +65,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="details">Description:</label>
-                                            <textarea name="details" id="summernote" class="form-control" cols="30" rows="10" placeholder="Write something about the brand...">{{$blog->details}}</textarea>
+                                            <textarea name="details" id="description" class="form-control" cols="30" rows="10" placeholder="Write something about the brand...">{{$blog->details}}</textarea>
                                             @error('details')
                                                 <p class="text-danger">{{$message}}</p>
                                             @enderror
@@ -88,16 +88,64 @@
     <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
     <script>
 
-        $('#summernote').summernote({
-            height: 200,
-            placeholder: 'Blog Contents here'
+        // $('#summernote').summernote({
+        //     height: 200,
+        //     placeholder: 'Blog Contents here'
 
-        });
+        // });
 
 
         $(".chosen-select").chosen({
             no_results_text: "Oops, nothing found!"
         });
+
+        $(function () {
+
+                $('#description').summernote({
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            console.log(files);
+                            for(var i=0; i < files.length; i++) {
+                                $.upload(files[i]);
+                            }
+                        }
+                    }
+
+                });
+
+                $.upload = function (file) {
+
+                    let out = new FormData();
+                    out.append('file', file, file.name);
+                    console.log("outform is ",out);
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ route('admin.blog.store')}}',
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: 'JSON',
+                        data: out,
+                        success: function (r) {
+                            console.log(typeof r);
+                            $('#description').summernote('insertImage', r.url);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error(textStatus + " " + errorThrown);
+                        }
+                    });
+                };
+                $(".description").summernote({
+                    callbacks : {
+                        onMediaDelete : function ($target, $editable) {
+                            console.log($target.attr('src'));   // get image url
+                        }
+                    }
+                });
+
+
+            });
 
 
     </script>

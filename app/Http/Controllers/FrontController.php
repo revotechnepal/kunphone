@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Cancelorder;
 use App\Models\Cart;
@@ -1030,5 +1031,15 @@ class FrontController extends Controller
         SEOMeta::setTitle('KunPhone');
         $setting = Setting::first();
         return view('frontend.termsandconditions', compact('setting'));
+    }
+
+    public function blogs()
+    {
+        SEOMeta::setTitle('KunPhone');
+        $setting = Setting::first();
+        $sliderblogs = Blog::latest()->orderBy('id', 'DESC')->take(5)->get();
+        $allblogs = Blog::latest()->simplePaginate(9);
+
+        return view('frontend.blogs', compact('setting', 'sliderblogs', 'allblogs'));
     }
 }

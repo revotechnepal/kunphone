@@ -115,6 +115,11 @@ Route::get('/policy',[FrontController::class, 'policy'])->name('policy');
 Route::get('/termsandconditions',[FrontController::class, 'termsandconditions'])->name('termsandconditions');
 
 
+//Blogs
+Route::get('/blogs',[FrontController::class, 'blogs'])->name('blogs');
+
+
+
 // Route::get('/dashboard', [FrontController::class, 'dashboard'])->name('dashboard');
 Route::get('/home', function () {
     if(Auth::user()->role_id == "3"){
