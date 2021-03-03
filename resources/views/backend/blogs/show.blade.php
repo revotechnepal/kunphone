@@ -17,6 +17,7 @@
                             <p><b>Title:</b> {{$blog->title}}</p>
                             <p><b>Category:</b> {{$category}}</p>
                             <p><b>Date:</b> {{date('Y/m/d h:m a', strtotime($blog->date))}}</p>
+                            <p><b>Author:</b> {{$blog->authorname}}</p>
                             <p><b>View Count:</b> {{$blog->view_count}}</p><br>
 
                         </div>

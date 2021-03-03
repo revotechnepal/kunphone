@@ -112,18 +112,25 @@ class BlogController extends Controller
             'category'=>'required',
             'date'=>'required',
             'details'=>'required',
+            'authorname'=>'required',
+            'authorimage'=>'required|mimes:png,jpg,jpeg',
         ]);
 
         $imagename = '';
-        if($request->hasfile('image')){
+        $authorimagename = '';
+        if($request->hasfile('image') && $request->hasfile('authorimage')){
             $image = $request->file('image');
+            $authorimage = $request->file('authorimage');
                 $imagename = $image->store('blog_photo', 'uploads');
+                $authorimagename = $authorimage->store('blogauthor_photo', 'uploads');
                 $blog = Blog::create([
                     'title'=>$data['title'],
                     'image'=>$imagename,
                     'category'=>$data['category'],
                     'date'=>$data['date'],
                     'details'=>$data['details'],
+                    'authorname'=>$data['authorname'],
+                    'authorimage'=>$authorimagename,
                 ]);
                 $blog->save();
 
@@ -187,14 +194,14 @@ class BlogController extends Controller
     {
         //
 
-        $blogImages = BlogImages::where('blog_id', $id)->get();
-        if(count($blogImages) > 0)
-        {
-            foreach ($blogImages as $blogImage) {
-                Storage::disk('uploads')->delete($blogImage->location);
-                $blogImage->delete();
-            }
-        }
+        // $blogImages = BlogImages::where('blog_id', $id)->get();
+        // if(count($blogImages) > 0)
+        // {
+        //     foreach ($blogImages as $blogImage) {
+        //         Storage::disk('uploads')->delete($blogImage->location);
+        //         $blogImage->delete();
+        //     }
+        // }
 
         if ($request->ajax()) {
             $this->validate($request,[
@@ -220,6 +227,7 @@ class BlogController extends Controller
             'category'=>'required',
             'date'=>'required',
             'details'=>'required',
+            'authorname'=>'required',
         ]);
 
             $image_name = '';
@@ -232,12 +240,24 @@ class BlogController extends Controller
                 $image_name = $blog->image;
             }
 
+            $authorimage_name = '';
+            if ($request->hasfile('authorimage')) {
+                $blogauthorimage = $request->file('authorimage');
+
+                Storage::disk('uploads')->delete($blog->authorimage);
+                $authorimage_name = $blogauthorimage->store('blogauthor_photo', 'uploads');
+            } else {
+                $authorimage_name = $blog->authorimage;
+            }
+
         $blog->update([
             'title'=>$data['title'],
             'image'=>$image_name,
             'category'=>$data['category'],
             'date'=>$data['date'],
             'details'=>$data['details'],
+            'authorname'=>$data['authorname'],
+            'authorimage'=>$authorimage_name,
         ]);
 
         $images = BlogImages::where('user_id',Auth::user()->id)->where('blog_id',0)->get();

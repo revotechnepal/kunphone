@@ -13,5 +13,5 @@ class Blog extends Model
         'category'=>'array',
     ];
 
-    protected $fillable = ['title', 'image', 'category', 'date', 'details', 'view_count'];
+    protected $fillable = ['title', 'image', 'category', 'date', 'details', 'view_count', 'authorname', 'authorimage'];
 }

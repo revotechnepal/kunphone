@@ -117,6 +117,10 @@ Route::get('/termsandconditions',[FrontController::class, 'termsandconditions'])
 
 //Blogs
 Route::get('/blogs',[FrontController::class, 'blogs'])->name('blogs');
+Route::get('/categoryblogs/{slug}',[FrontController::class, 'categoryblogs'])->name('categoryblogs');
+Route::get('/viewblog/{id}',[FrontController::class, 'viewblog'])->name('viewblog');
+
+
 
 
 

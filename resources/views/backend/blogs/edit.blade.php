@@ -62,6 +62,27 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="authorname">Author Name: </label>
+                                            <input type="text" name="authorname" class="form-control" value="{{@old('authorname')?@old('authorname'):$blog->authorname}}" placeholder="Name of the Author">
+                                            @error('authorname')
+                                                <p class="text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="authorimage">Upload Author Image: </label>
+                                            <input type="file" name="authorimage" class="form-control">
+                                            <span style="color: red; font-size: 12px;">Note*: Leave empty to use previous image</span>
+                                            @error('authorimage')
+                                                <p class="text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="details">Description:</label>

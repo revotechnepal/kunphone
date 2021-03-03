@@ -40,10 +40,23 @@
             @endforeach
       </div>
     </section> --}}
+
+    <div class="hero-wrap hero-bread" style="background-image: url('frontend/images/bg_6.jpg');">
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{{route('index')}}">Home</a></span> <span>Blogs</span></p>
+              <h1 class="mb-0 bread">KunPhone Blogs</h1>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
     <section class="ftco-section bg-light">
     	<div class="container">
     		<div class="row">
-    			<div class="col-md-12 col-lg-12 order-md-last">
+    			<div class="col-md-8 col-lg-10 order-md-last">
     				<div class="row">
                         @foreach ($allblogs as $blog)
                             {{-- @php
@@ -54,8 +67,8 @@
                                 <div class="product d-flex flex-column">
 
 
-                                            <a href="#" class="img-prod"><img class="img-fluid" src="{{Storage::disk('uploads')->url($blog->image)}}" alt="Blog Image" style="max-height: auto; width: auto;">
-                                            <span class="status">Blog</span>
+                                            <a href="{{route('viewblog', $blog->id)}}" class="img-prod"><img class="img-fluid" src="{{Storage::disk('uploads')->url($blog->image)}}" alt="Blog Image" style="max-height: auto; width: auto;">
+
                                                 <div class="overlay"></div>
                                             </a>
                                     <div class="text py-3 pb-4 px-3">
@@ -74,19 +87,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <h3><a href="#">{{$blog->title}}</a></h3>
-                                        {{-- <div class="pricing">
-                                            <p class="price"><span>Rs. {{$outproduct->price}}</span></p>
-                                        </div> --}}
-                                        {{-- <p class="bottom-area d-flex px-3">
-                                            <a href="{{route('product', ['id' => $outproduct->id, 'slug' => $product->slug])}}" class="buy-now text-center py-2">To Cart<span><i class="ion-ios-cart ml-1"></i></span></a>&nbsp;
-
-                                            @if(Auth::guest() || Auth::user()->role_id != 3)
-                                                <a href="javascript:void(0)" onclick="openLoginModal();" class="login-panel buy-now text-center py-2">To Wishlist<span><i class="ion-ios-list ml-1"></i></span></a>
-                                            @elseif(Auth::user()->hasRole('user'))
-                                                <a href="{{route('addtowishlist', $outproduct->id)}}" class="buy-now text-center py-2">To Wishlist<span><i class="ion-ios-list ml-1"></i></span></a>
-                                            @endif
-                                        </p> --}}
+                                        <h3><a href="{{route('viewblog', $blog->id)}}">{{$blog->title}}</a></h3>
                                     </div>
                                 </div>
                             </div>
@@ -101,15 +102,48 @@
                         </div>
 		            </div>
 		    	</div>
+
+                <div class="col-md-4 col-lg-2">
+                    <div class="sidebar">
+                        <div class="sidebar-box-2">
+                            <h2 class="heading">Categories</h2>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        @foreach ($allcategories as $currentcategory)
+                                            <a href="{{route('categoryblogs', $currentcategory->slug)}}">{{$currentcategory->name}}</a>
+                                        @endforeach
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar-box-2">
+                            <h2 class="heading">Popular Blogs</h2>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @foreach ($popularblogs as $popular)
+                                        {{-- <div class="row"> --}}
+                                            {{-- <div class="col-md-2" style="background: black">
+                                                <p style="color: white; margin-left: -5px;">{{$no++}}</p>
+                                            </div> --}}
+                                            {{-- <div class="col-md-10"> --}}
+                                                <a href="{{route('viewblog', $popular->id)}}"><p><span style="background: black; color:white; font-size: 20px; padding: 1px 8px 1px 8px">{{$no++}}</span> <u>{{$popular->title}}</u></p></a>
+                                            {{-- </div> --}}
+                                        {{-- </div> --}}
+
+                                        @endforeach
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 @endsection
-
-@push('scripts')
-<!-- Include AlgoliaSearch JS Client and autocomplete.js library -->
-<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
-<script src="{{ asset('frontend/js/algolia_phone1.js') }}"></script>
-@endpush
 

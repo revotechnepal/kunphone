@@ -21,6 +21,8 @@ class CreateBlogsTable extends Migration
             $table->string('date');
             $table->longText('details');
             $table->integer('view_count')->default(0);
+            $table->string('authorname');
+            $table->string('authorimage');
             $table->timestamps();
         });
     }

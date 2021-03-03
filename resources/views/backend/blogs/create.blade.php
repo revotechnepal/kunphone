@@ -8,6 +8,13 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="container-fluid">
+            {{-- @if ($errors->any())
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        {{$error}}
+                    @endforeach
+                </div>
+            @endif --}}
             <h2 class="mb-3">Create Blog <a href="{{route('admin.blog.index')}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View Blogs</a></h2>
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +35,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="logo">Upload Image: </label>
+                                            <label for="image">Upload Image: </label>
                                             <input type="file" name="image" class="form-control">
                                             @error('image')
                                                 <p class="text-danger">{{$message}}</p>
@@ -55,6 +62,26 @@
                                             <label for="date">Date:</label>
                                             <input type="datetime-local" class="form-control datetimepicker" name="date" value="{{@old('date')}}" placeholder="Date">
                                             @error('date')
+                                                <p class="text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="authorname">Author Name: </label>
+                                            <input type="text" name="authorname" class="form-control" value="{{@old('authorname')}}" placeholder="Name of the Author">
+                                            @error('authorname')
+                                                <p class="text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="authorimage">Upload Author Image: </label>
+                                            <input type="file" name="authorimage" class="form-control">
+                                            @error('authorimage')
                                                 <p class="text-danger">{{$message}}</p>
                                             @enderror
                                         </div>
