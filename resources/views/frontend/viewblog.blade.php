@@ -48,7 +48,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-1">
-                            <img src="{{Storage::disk('uploads')->url($currentblog->authorimage)}}" height="50px" width="50px">
+                            <img src="{{Storage::disk('uploads')->url($currentblog->authorimage)}}" height="55px" width="55px">
                         </div>
                         <div class="col-md-4">
                             <p>{{$currentblog->authorname}}<br>
@@ -95,6 +95,9 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
+                                        @if (count($popularblogs) == 0)
+                                            <p>No blogs.</p>
+                                        @endif
                                         @php
                                             $no = 1;
                                         @endphp

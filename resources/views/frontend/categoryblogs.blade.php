@@ -90,6 +90,9 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
+                                        @if (count($popularblogs) == 0)
+                                            <p>No blogs.</p>
+                                        @endif
                                         @php
                                             $no = 1;
                                         @endphp

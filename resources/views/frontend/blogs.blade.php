@@ -58,6 +58,10 @@
     		<div class="row">
     			<div class="col-md-8 col-lg-10 order-md-last">
     				<div class="row">
+                        @if (count($allblogs) == 0)
+                            <p>No blogs at current time.</p>
+                        @endif
+
                         @foreach ($allblogs as $blog)
                             {{-- @php
                                 $product = DB::table('products')->where('id', $outproduct->product_id)->first();
@@ -65,8 +69,6 @@
                             @endphp --}}
                             <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex">
                                 <div class="product d-flex flex-column">
-
-
                                             <a href="{{route('viewblog', $blog->id)}}" class="img-prod"><img class="img-fluid" src="{{Storage::disk('uploads')->url($blog->image)}}" alt="Blog Image" style="max-height: auto; width: auto;">
 
                                                 <div class="overlay"></div>
@@ -122,6 +124,9 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
+                                        @if (count($popularblogs) == 0)
+                                            <p>No blogs.</p>
+                                        @endif
                                         @php
                                             $no = 1;
                                         @endphp
