@@ -11,16 +11,16 @@ use Illuminate\Notifications\Notification;
 class NewOrderNotification extends Notification
 {
     use Queueable;
-    private $order;
+    private $orderedProduct;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($orderedProduct)
     {
         //
-        $this->order = $order;
+        $this->orderedProduct = $orderedProduct;
     }
 
     /**
@@ -58,8 +58,9 @@ class NewOrderNotification extends Notification
     {
         return [
             //
-            'order_id'=>$this->order->id,
-            'user_id'=>$this->order->user_id,
+            'order_id'=>$this->orderedProduct->id,
+            // 'user_id'=>$this->orderedProduct->user_id,
+            'vendor_id'=>$this->orderedProduct->vendor_id,
         ];
     }
 }

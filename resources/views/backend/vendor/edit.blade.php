@@ -5,7 +5,7 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="container-fluid">
-            <h2 class="mb-3">Edit Vendor <a href="{{route('admin.vendor.index')}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View Vendors</a></h2>
+            <h2 class="mb-3">Edit Profile <a href="{{route('admin.vendor.index')}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View Vendors</a></h2>
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel">

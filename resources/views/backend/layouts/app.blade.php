@@ -30,7 +30,7 @@
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="{{route('dashboard')}}"><b style="font-size: 19px;">{{ config('app.name') }}</b></a>
+				<a href="{{route('dashboard')}}"><b style="font-size: 18px;">{{ config('app.name') }}</b></a>
 			</div>
 			<div class="container-fluid">
 				<div class="navbar-btn">
@@ -49,10 +49,10 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
                             @php
-                                $incomingproduct = DB::table('notifications')->where('type','App\Notifications\IncomingProductNotification')->where('is_read', null)->count();
-                                $neworder = DB::table('notifications')->where('type','App\Notifications\NewOrderNotification')->where('is_read', null)->count();
-                                $newuser = DB::table('notifications')->where('type','App\Notifications\NewUserNotification')->where('is_read', null)->count();
-                                $exchangeorder = DB::table('notifications')->where('type','App\Notifications\ExchangeOrderNotification')->where('is_read', null)->count();
+                                $incomingproduct = DB::table('notifications')->where('type','App\Notifications\IncomingProductNotification')->where('is_read', null)->where('vendor_id', null)->count();
+                                $neworder = DB::table('notifications')->where('type','App\Notifications\NewOrderNotification')->where('is_read', null)->where('vendor_id', null)->count();
+                                $newuser = DB::table('notifications')->where('type','App\Notifications\NewUserNotification')->where('is_read', null)->where('vendor_id', null)->count();
+                                $exchangeorder = DB::table('notifications')->where('type','App\Notifications\ExchangeOrderNotification')->where('is_read', null)->where('vendor_id', null)->count();
                             @endphp
                             @if(Auth::user()->role_id == 1)
     							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
@@ -65,20 +65,20 @@
                                         <span class="badge bg-danger">1</span>
                                     @elseif ($newuser == 0 && $incomingproduct == 0 && $neworder == 0 && $exchangeorder > 0)
                                         <span class="badge bg-danger">1</span>
-    
-                                    @elseif  ($incomingproduct > 0 && $neworder >0 && $newuser == 0 && $exchangeorder == 0)
+
+                                    @elseif  ($incomingproduct > 0 && $neworder > 0 && $newuser == 0 && $exchangeorder == 0)
                                         <span class="badge bg-danger">2</span>
-                                    @elseif  ($incomingproduct > 0 && $newuser >0 && $neworder == 0 && $exchangeorder == 0)
+                                    @elseif  ($incomingproduct > 0 && $newuser > 0 && $neworder == 0 && $exchangeorder == 0)
                                         <span class="badge bg-danger">2</span>
-                                    @elseif  ($incomingproduct > 0 && $exchangeorder >0 && $neworder == 0 && $newuser == 0)
+                                    @elseif  ($incomingproduct > 0 && $exchangeorder > 0 && $neworder == 0 && $newuser == 0)
                                         <span class="badge bg-danger">2</span>
                                     @elseif  ($neworder > 0 and $newuser > 0 && $incomingproduct == 0 && $exchangeorder == 0)
                                         <span class="badge bg-danger">2</span>
-                                    @elseif  ($neworder > 0 and $exchangeorder > 0 && $newuser == 0 && $exchangeorder == 0)
+                                    @elseif  ($neworder > 0 and $exchangeorder > 0 && $newuser == 0 && $incomingproduct == 0)
                                         <span class="badge bg-danger">2</span>
                                     @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct == 0 && $neworder == 0)
                                         <span class="badge bg-danger">2</span>
-    
+
                                         @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct > 0 && $neworder == 0)
                                         <span class="badge bg-danger">3</span>
                                         @elseif  ($newuser > 0 and $exchangeorder > 0 && $incomingproduct == 0 && $neworder > 0)
@@ -87,14 +87,14 @@
                                         <span class="badge bg-danger">3</span>
                                         @elseif  ($newuser == 0 and $exchangeorder > 0 && $incomingproduct > 0 && $neworder > 0)
                                         <span class="badge bg-danger">3</span>
-    
-    
+
+
                                     @elseif  ($incomingproduct > 0 && $newuser > 0 && $neworder > 0 && $exchangeorder > 0)
                                         <span class="badge bg-danger">4</span>
                                     @else
                                         <span class="badge bg-danger">0</span>
                                     @endif
-    
+
                                 </a>
                             @endif
 
@@ -103,7 +103,7 @@
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just arrived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
                                 @elseif ($neworder > 0 && $newuser == 0 && $incomingproduct == 0 && $exchangeorder == 0)
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just arrived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just arrived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
                                 @elseif ($newuser > 0 && $incomingproduct == 0 && $neworder == 0 && $exchangeorder == 0)
                                     <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
@@ -115,7 +115,7 @@
 
                                 @elseif  ($incomingproduct > 0 && $neworder >0 && $newuser == 0 && $exchangeorder == 0)
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just recived.</a></li>
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
                                 @elseif  ($incomingproduct > 0 && $newuser >0 && $neworder == 0 && $exchangeorder == 0)
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just recived.</a></li>
@@ -129,7 +129,7 @@
 
                                     @elseif  ($newuser > 0 && $neworder > 0 && $incomingproduct == 0 && $exchangeorder == 0)
                                     <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
 
                                     @elseif  ($newuser > 0 && $neworder == 0 && $incomingproduct == 0 && $exchangeorder > 0)
@@ -138,7 +138,7 @@
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
 
                                     @elseif  ($newuser == 0 && $neworder > 0 && $incomingproduct == 0 && $exchangeorder > 0)
-                                    <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just registered.</a></li>
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$exchangeorder}} new exchange order has just received.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
 
@@ -152,17 +152,17 @@
                                     @elseif  ($newuser > 0 && $neworder > 0 && $incomingproduct == 0 && $exchangeorder > 0)
                                     <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$exchangeorder}} new exchange order has just received.</a></li>
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
 
                                     @elseif  ($newuser > 0 && $neworder > 0 && $incomingproduct > 0 && $exchangeorder == 0)
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just recived.</a></li>
                                     <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
 
                                     @elseif  ($newuser == 0 && $neworder > 0 && $incomingproduct > 0 && $exchangeorder > 0)
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$exchangeorder}} new exchange order has just received.</a></li>
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just recived.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
@@ -170,7 +170,7 @@
                                     @elseif  ($incomingproduct > 0 && $neworder > 0 && $newuser > 0 &$exchangeorder > 0)
                                     <li><a href="{{route('admin.productincoming.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$incomingproduct}} incoming product has just recived.</a></li>
                                     <li><a href="{{route('admin.user.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$newuser}} new user has just registered.</a></li>
-                                    <li><a href="{{route('admin.order.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$neworder}} new order has just recived.</a></li>
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="notification-item"><span class="dot bg-warning"></span>{{$exchangeorder}} new exchange order has just received.</a></li>
                                     <li><a class="notification-item" href="{{route('admin.notificationsread')}}"><span class="dot bg-danger"></span>Mark all as read</a></li>
                                 @else
@@ -267,7 +267,8 @@
 							<a href="#subPage2" data-toggle="collapse" class="collapsed"><i class="lnr lnr-alarm"></i> <span>Orders</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 							<div id="subPage2" class="collapse ">
 								<ul class="nav">
-                                    <li><a href="{{route('admin.order.index')}}" class="">View Orders</a></li>
+                                    <li><a href="{{route('admin.orderedproducts.index')}}" class="">View Product Orders</a></li>
+                                    {{-- <li><a href="{{route('admin.order.index')}}" class="">View Orders</a></li> --}}
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="">View Exchange Orders</a></li>
 								</ul>
 							</div>

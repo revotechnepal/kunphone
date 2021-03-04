@@ -60,6 +60,7 @@ class ExchangeOrderNotification extends Notification
             //
             'exchange_order_id'=>$this->exchangeorder->id,
             'user_id'=>$this->exchangeorder->user_id,
+            'vendor_id'=>$this->exchangeorder->vendor,
         ];
     }
 }

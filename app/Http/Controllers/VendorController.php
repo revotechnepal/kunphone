@@ -81,7 +81,7 @@ class VendorController extends Controller
             'phone'=>$data['phone'],
             'role_id' => 4
         ]);
-        
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -90,7 +90,7 @@ class VendorController extends Controller
             'password' => Hash::make('password'),
         ]);
         $vendor->save();
-        
+
         $user->save();
 
         return redirect()->route('admin.vendor.index')->with('success', 'Vendor Successfully Added');
@@ -130,7 +130,7 @@ class VendorController extends Controller
     {
         $vendor = Vendor::findorfail($id);
         $user = User::where('name', $vendor->name)->first();
-        
+
         $data = $this->validate($request,[
             'name' => 'required',
             'address' => 'required',
@@ -146,7 +146,7 @@ class VendorController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
         ]);
-        
+
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -174,7 +174,50 @@ class VendorController extends Controller
             $user = User::where('name', $vendor->name)->first();
             $user->delete();
             $vendor->delete();
-            return redirect()->route('admin.vendor.index')->with('success', 'Vendor Successfully Updated');
+            return redirect()->route('admin.vendor.index')->with('success', 'Vendor Successfully deleted.');
         }
+    }
+
+
+    public function vendoredit($id)
+    {
+        $vendor = Vendor::findorfail($id);
+        return view('backend.vendorside.profileedit', compact('vendor'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Vendor  $vendor
+     * @return \Illuminate\Http\Response
+     */
+    public function vendorupdate(Request $request, $id)
+    {
+        $vendor = Vendor::findorfail($id);
+        $user = User::where('name', $vendor->name)->first();
+
+        $data = $this->validate($request,[
+            'name' => 'required',
+            'address' => 'required',
+            'district' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+        ]);
+
+        $vendor->update([
+            'name' => $data['name'],
+            'address' => $data['address'],
+            'district' => $data['district'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+        ]);
+
+        $user->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
+
+        return redirect()->route('vendor.profile')->with('success', 'Profile Successfully Updated');
     }
 }

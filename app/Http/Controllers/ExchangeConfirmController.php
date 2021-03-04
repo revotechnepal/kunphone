@@ -19,7 +19,7 @@ class ExchangeConfirmController extends Controller
      */
     public function index(Request $request)
     {
-        $exchangeorder = DB::table('notifications')->where('type','App\Notifications\ExchangeOrderNotification')->get();
+        $exchangeorder = DB::table('notifications')->where('type','App\Notifications\ExchangeOrderNotification')->where('vendor_id', null)->get();
         foreach ($exchangeorder as $order) {
             DB::update('update notifications set is_read = 1 where id = ?', [$order->id]);
         }
@@ -45,7 +45,7 @@ class ExchangeConfirmController extends Controller
                 })
 
                 ->addColumn('added_date', function($row){
-                    $added_date = date('F d Y, h:i:s a', strtotime($row->created_at));
+                    $added_date = date('F d Y, h:i a', strtotime($row->created_at));
                     return $added_date;
                 })
                 ->addColumn('action', function($row){
@@ -92,7 +92,9 @@ class ExchangeConfirmController extends Controller
     public function show($id)
     {
         $exchangeorder = ExchangeConfirm::where('id', $id)->first();
-        return view('backend.exchange_orders.show', compact('exchangeorder'));
+        $incomingproduct = ProductIncoming::where('id', $exchangeorder->incomingproduct_id)->first();
+        $outgoingproduct = ProductOutgoing::where('id', $exchangeorder->outgoingproduct_id)->first();
+        return view('backend.exchange_orders.show', compact('exchangeorder', 'incomingproduct', 'outgoingproduct'));
     }
 
     /**
@@ -116,10 +118,16 @@ class ExchangeConfirmController extends Controller
     public function update($id)
     {
         $exchangeorder = ExchangeConfirm::findorFail($id);
-        $exchangeorder->update([
-            'is_processsing' => 0
+        $outgoingproduct = ProductOutgoing::where('id', $exchangeorder->outgoingproduct_id)->first();
+
+        $quantity = $outgoingproduct->quantity + 1;
+        $outgoingproduct->update([
+            'quantity' => $quantity
         ]);
-        return redirect()->back()->with('success', 'Exchange completed.');
+        $exchangeorder->update([
+            'is_processsing' => 2
+        ]);
+        return redirect()->back()->with('success', 'Exchange cancelled successfully.');
     }
 
     /**

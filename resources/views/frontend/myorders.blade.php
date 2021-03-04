@@ -32,7 +32,6 @@
                                 <thead>
                                     <tr>
                                         <th style="font-weight: bold;">Order Id</th>
-                                        <th style="font-weight: bold;">Order Status</th>
                                         <th style="font-weight: bold;">Ordered Date</th>
                                         <th style="font-weight: bold;">Action</th>
                                     </tr>
@@ -41,16 +40,12 @@
                                     @foreach ($orders as $order)
                                         <tr>
                                             <td>{{$order->id}}</td>
-                                            <td>{{$order->orderStatus->status}}</td>
                                             <td>{{date('F d, Y', strtotime($order->created_at))}}</td>
                                             <td>
                                                 <a href="#" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong{{$order->id}}">View Order</a>
-                                                    @if ($order->order_status_id == 1 || $order->order_status_id == 2 || $order->order_status_id == 3)
-                                                        <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#cancel{{$order->id}}">Cancel Order</a>
-                                                    @endif
 
                                                     <div class="modal fade" id="exampleModalLong{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document" style="max-width: 700px;">
+                                                        <div class="modal-dialog" role="document" style="max-width: 900px;">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                 <h5 class="modal-title" id="exampleModalLongTitle">Order Id -> {{$order->id}}</h5>
@@ -66,12 +61,11 @@
                                                                                 <tr>
                                                                                     <th style="font-weight: bold;">Model Image</th>
                                                                                     <th style="font-weight: bold;">Model Name</th>
+                                                                                    <th style="font-weight: bold;">Order Status</th>
                                                                                     <th style="font-weight: bold;">Quantity</th>
                                                                                     <th style="font-weight: bold;">Unit Price</th>
                                                                                     <th style="font-weight: bold;">Total</th>
-                                                                                    @if ($order->orderStatus->status == "Delivered")
-                                                                                        <th style="font-weight: bold;">Review</th>
-                                                                                    @endif
+                                                                                    <th style="font-weight: bold;">Action</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -102,12 +96,18 @@
                                                                                                 <p class="mt-2">(New Phone)</p>
                                                                                             @endif
                                                                                         </td>
+                                                                                        <td>
+                                                                                            @php
+                                                                                                $status = DB::table('order_statuses')->where('id', $productorder->order_status_id)->first();
+                                                                                            @endphp
+                                                                                            {{$status->status}}
+                                                                                        </td>
                                                                                         <td>{{$productorder->quantity}}</td>
                                                                                         <td>{{$productorder->price}}</td>
                                                                                         <td>
                                                                                             {{$productorder->quantity * $productorder->price}}
                                                                                         </td>
-                                                                                        @if($order->orderStatus->status == "Delivered")
+                                                                                        @if($status->status == "Delivered")
                                                                                         <td>
                                                                                             @php
                                                                                                 $user_id = Auth::user()->id;
@@ -115,7 +115,7 @@
                                                                                             @endphp
 
                                                                                             @if (empty($userreview))
-                                                                                                <button type="button" class="btn btn-info py-3 px-4" data-toggle="modal" data-target="#reviewModal{{$order->id . $productorder->product_id}}">Add</button>
+                                                                                                <button type="button" class="btn btn-info py-3 px-4" data-toggle="modal" data-target="#reviewModal{{$order->id . $productorder->product_id}}">Add Review</button>
 
                                                                                                 <div class="modal fade" id="reviewModal{{$order->id . $productorder->product_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                     <div class="modal-dialog" role="document">
@@ -167,7 +167,7 @@
                                                                                                 </div>
 
                                                                                             @else
-                                                                                                <button type="button" class="btn btn-secondary py-3 px-4" data-toggle="modal" data-target="#editreviewModal{{$order->id . $productorder->product_id}}">Edit</button>
+                                                                                                <button type="button" class="btn btn-secondary py-3 px-4" data-toggle="modal" data-target="#editreviewModal{{$order->id . $productorder->product_id}}">Edit Review</button>
                                                                                                 <div class="modal fade" id="editreviewModal{{$order->id . $productorder->product_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                     <div class="modal-dialog" role="document">
                                                                                                     <div class="modal-content">
@@ -238,8 +238,44 @@
                                                                                                 </div>
                                                                                             @endif
                                                                                         </td>
+
+                                                                                        @elseif ($productorder->order_status_id == 1 || $productorder->order_status_id == 2 || $productorder->order_status_id == 3)
+                                                                                            <td><a href="#" class="btn btn-danger py-3 px-4"  data-toggle="modal" data-target="#cancel{{$productorder->id}}">Cancel Order</a></td>
+                                                                                        @else
+                                                                                            <td>-</td>
                                                                                         @endif
                                                                                 </tr>
+                                                                                <div class="modal fade" id="cancel{{$productorder->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                                                    <div class="modal-dialog" role="document">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                            <h5 class="modal-title" id="exampleModalLongTitle">Cancel Order : Order Id -> {{$order->id}}</h5>
+                                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                            </button>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                <form action="{{route('cancelorder', $productorder->id)}}" method="POST">
+                                                                                                    @csrf
+                                                                                                    @method('PUT')
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="reason">Pick a reason</label>
+                                                                                                        <select name="reason">
+                                                                                                            <option value="Cheaper alternative available for lesser price">Cheaper alternative available for lesser price</option>
+                                                                                                            <option value="Ordered out of excitement and realised it's of no need">Ordered out of excitement and realised it's of no need</option>
+                                                                                                            <option value="Not going to be available in town due to some urgent travel">Not going to be available in town due to some urgent travel</option>
+                                                                                                            <option value="Product is taking too long to be delivered">Product is taking too long to be delivered</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                    <button type="submit" class="btn btn-danger btn-sm">Submit & Cancel</button>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                            <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                                 @endforeach
                                                                             </tbody>
                                                                         </table>
@@ -251,37 +287,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="modal fade" id="cancel{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Cancel Order : Order Id -> {{$order->id}}</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form action="{{route('cancelorder', $order->id)}}" method="POST">
-                                                                        @csrf
-                                                                        @method('PUT')
-                                                                        <div class="form-group">
-                                                                            <label for="reason">Pick a reason</label>
-                                                                            <select name="reason">
-                                                                                <option value="Cheaper alternative available for lesser price">Cheaper alternative available for lesser price</option>
-                                                                                <option value="Ordered out of excitement and realised it's of no need">Ordered out of excitement and realised it's of no need</option>
-                                                                                <option value="Not going to be available in town due to some urgent travel">Not going to be available in town due to some urgent travel</option>
-                                                                                <option value="Product is taking too long to be delivered">Product is taking too long to be delivered</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <button type="submit" class="btn btn-danger btn-sm">Submit & Cancel</button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
                                             </td>
                                         </tr>
                                     @endforeach

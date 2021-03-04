@@ -22,7 +22,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $neworder = DB::table('notifications')->where('type','App\Notifications\NewOrderNotification')->get();
+        $neworder = DB::table('notifications')->where('type','App\Notifications\NewOrderNotification')->where('vendor_id', null)->get();
         foreach ($neworder as $order) {
             DB::update('update notifications set is_read = 1 where id = ?', [$order->id]);
         }
@@ -34,10 +34,6 @@ class OrderController extends Controller
                 ->addColumn('customer_name', function($row){
                     $customer_name = $row->user->name;
                     return $customer_name;
-                })
-                ->addColumn('order_status', function($row){
-                    $order_status = $row->orderStatus->status;
-                    return $order_status;
                 })
                 ->addColumn('delievery_address', function($row){
                     $delievery_address = $row->delieveryAddress->address;
@@ -58,7 +54,7 @@ class OrderController extends Controller
 
                             return $btn;
                 })
-                ->rawColumns(['customer_name', 'order_status', 'delievery_address','total_price','added_date', 'action'])
+                ->rawColumns(['customer_name', 'delievery_address','total_price','added_date', 'action'])
                 ->make(true);
         }
 
@@ -95,9 +91,8 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::where('id', $id)->first();
-        $orderstatuses = OrderStatus::get();
         $orderproducts = OrderedProduct::where('order_id', $id)->get();
-        return view('backend.orders.show', compact('order', 'orderstatuses', 'orderproducts'));
+        return view('backend.orders.show', compact('order', 'orderproducts'));
     }
 
     /**
@@ -120,15 +115,19 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request['firstname']);
+        $order = Order::findorFail($id);
         $data = $this->validate($request, [
             'firstname' => 'required',
             'lastname' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'description' => 'required',
+            'tole' => 'required',
+            'email' => 'required',
+            'town' => 'required',
+            'description' => '',
         ]);
 
-        $order = Order::where('id', $id)->first();
         $delievery_address = DelieveryAddress::where('id', $order->delievery_address_id)->first();
 
         $delievery_address->update([
@@ -136,6 +135,9 @@ class OrderController extends Controller
             'lastname' => $data['lastname'],
             'address' => $data['address'],
             'phone' => $data['phone'],
+            'tole' => $data['tole'],
+            'email' => $data['email'],
+            'town' => $data['town'],
             'description' => $data['description'],
         ]);
         return redirect()->back()->with('success', 'Shipping Details Successfully Updated');

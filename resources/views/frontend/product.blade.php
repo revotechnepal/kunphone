@@ -93,16 +93,16 @@
 
                         <h4 class="heading">Storage Info</h4>
                         <p>{{$outgoingproduct->ram}}/{{$outgoingproduct->rom}}</p>
-                        
+
                         @if ($outgoingproduct->condition == 'new')
-                    
+
                     @elseif($outgoingproduct->condition == 'used')
                         <h4 class="heading mt-3">SKU</h4>
                         <span class="status">{{$outgoingproduct->sku}}</span>
                     @endif
                     <p class="price"><span style="red">Rs. {{$outgoingproduct->price}}</span></p>
-        
-                    
+
+
                     <div class="col-md-12">
                         <p style="color: #000;">{{$outgoingproduct->quantity}} piece available</p>
                     </div>
@@ -227,6 +227,14 @@
                         </div>
                     </div>
                     @endif
+                    <div class="row">
+                        <div class="col-md-2">
+                            Vendor:
+                        </div>
+                        <div class="col-md-10">
+                            {{$outgoingproduct->vendor->name}}
+                        </div>
+                    </div>
                     @if ($outgoingproduct->details == null)
 
                     @else

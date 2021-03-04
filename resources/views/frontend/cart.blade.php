@@ -73,7 +73,6 @@
                                                     <p class="mt-2">(New Phone)</p>
                                                 @endif
                                             </td>
-
                                             <td class="product-name">
                                                 <h3>{{$cartproduct->name}}</h3>
                                                 <p>{{$product->ram}} / {{$product->rom}}</p>
@@ -81,11 +80,14 @@
                                                     <p>(SKU: {{$outgoingproduct->sku}})</p>
                                                 @endif
                                             </td>
-
                                             <td class="price">Rs. {{$product->price}}</td>
 
                                             <td class="quantity qua-col">
-                                                <p style="color: #000;">Total Quantity in Stock: {{$outgoingproduct->quantity}}</p>
+                                                <p style="color: #000;">Total Quantity in Stock: {{$outgoingproduct->quantity}}<br>
+                                                    @if ($outgoingproduct->quantity <= 0)
+                                                        (Sold Out)
+                                                    @endif
+                                                </p>
 
                                                 <form action="{{route('updatecart', $product->id)}}" method="POST">
                                                     @csrf
@@ -98,7 +100,9 @@
 
                                                     <a href="#" class="btn btn-primary py-3 px-5 mr-2" onclick="this.parentNode.submit()">Update</a>
                                                 </form>
+
                                         </td>
+
                                             <td class="total">Rs. {{$product->price * $product->quantity }}</td>
                                         </tr><!-- END TR-->
                                     @endforeach

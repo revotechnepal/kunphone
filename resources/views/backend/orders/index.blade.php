@@ -30,7 +30,6 @@
                     <tr>
                         <th class="text-center">No</th>
                         <th class="text-center">Customer Name</th>
-                        <th class="text-center">Order Status</th>
                         <th class="text-center">Delievery Address</th>
                         <th class="text-center">Total Price</th>
                         <th class="text-center">Added Date</th>
@@ -58,7 +57,6 @@
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'customer_name', name: 'customer_name'},
-              {data: 'order_status', name: 'order_status'},
               {data: 'delievery_address', name: 'delievery_address'},
               {data: 'total_price', name:'total_price'},
               {data: 'added_date', name: 'added_date'},

@@ -19,6 +19,9 @@ class CreateOrderedProductsTable extends Migration
             $table->integer('product_id');
             $table->integer('quantity');
             $table->integer('price');
+            $table->integer('order_status_id');
+            $table->integer('vendor_id')->nullable();
+            $table->string('warranty')->nullable();
             $table->timestamps();
         });
     }

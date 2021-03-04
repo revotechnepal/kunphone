@@ -19,7 +19,17 @@ use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\OrderedProductController;
+use App\Http\Controllers\VenderOrderController;
+use App\Http\Controllers\VendorBrandController;
+use App\Http\Controllers\VendorExchangeController;
+use App\Http\Controllers\VendorOutgoingController;
+use App\Http\Controllers\VendorsideController;
+use App\Http\Controllers\VendorUsedProductController;
 use App\Models\ExchangeConfirm;
+use App\Models\OrderedProduct;
+use App\Models\ProductOutgoing;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -115,9 +125,35 @@ Route::get('/termsandconditions',[FrontController::class, 'termsandconditions'])
 
 // Route::get('/dashboard', [FrontController::class, 'dashboard'])->name('dashboard');
 Route::get('/home', function () {
-    if(Auth::user()->role_id == "3"){
+    if(Auth::user()->role_id == 3){
         return redirect()->route('index');
-    }else{
+    }elseif(Auth::user()->role_id == 4)
+    {
+        $vendor = Vendor::where('name', Auth::user()->name)->first();
+        $outgoingproduct = ProductOutgoing::where('vendor_id', $vendor->id)->where('quantity', '!=', 0)->get();
+        $orderedproducts = OrderedProduct::where('vendor_id', $vendor->id)->where('warranty', '!=', null)->get();
+        $exchangeorders = ExchangeConfirm::where('vendor', $vendor->id)->where('warranty', '!=', null)->get();
+        $allorders = OrderedProduct::where('vendor_id', $vendor->id)->count();
+        $allexchangeorders = ExchangeConfirm::where('vendor', $vendor->id)->count();
+        $orders = OrderedProduct::where('vendor_id', $vendor->id)->take(10)->get();
+        $exchangeOrders = ExchangeConfirm::where('vendor', $vendor->id)->take(10)->get();
+
+        $totalorders = $allorders + $allexchangeorders;
+        $income = 0;
+        $monthlyincome = 0;
+        foreach ($orderedproducts as $product) {
+            $total = $product->quantity * $product->price;
+            $monthyear = date('F, Y', strtotime($product->created_at));
+            if($monthyear == date('F, Y'))
+            {
+                $monthtotal = $product->quantity * $product->price;
+                $monthlyincome = $monthtotal + $monthlyincome;
+            }
+            $income = $total + $income;
+        }
+        return view('backend.vendorsindex', compact('vendor', 'income', 'exchangeOrders', 'totalorders', 'monthlyincome', 'outgoingproduct', 'orderedproducts', 'orders', 'exchangeorders'));
+    }
+    else{
         return view('backend.index');
     }
 })->name('dashboard');
@@ -136,7 +172,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles']
     Route::get('/productincoming/view/{id}', [ProductIncomingController::class, 'view'])->name('productincoming.view');
     Route::get('/notificationsread', [ProductIncomingController::class, 'notificationsread'])->name('notificationsread');
     Route::resource('productincoming', ProductIncomingController::class);
-    Route::put('/updatestatus/{id}', [OrderController::class, 'updatestatus'])->name('updatestatus');
+    // Route::put('/updatestatus/{id}', [OrderController::class, 'updatestatus'])->name('updatestatus');
     Route::put('/paymentstatus/{id}', [OrderController::class, 'paymentstatus'])->name('paymentstatus');
     Route::resource('order', OrderController::class);
     // Route::put('/updateexchangestatus/{id}', [ExchangeOrderController::class, 'updateexchangestatus'])->name('updateexchangestatus');
@@ -149,13 +185,23 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles']
     Route::resource('vendor', VendorController::class);
     Route::resource('exchangeconfirm', ExchangeConfirmController::class);
     Route::resource('faqs', FaqController::class);
-
+    Route::resource('orderedproducts', OrderedProductController::class);
 });
-Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles'], 'roles'=>['admin','vendor']], function(){
-    Route::resource('productoutgoing', ProductOutgoingController::class);
-    Route::resource('productused', ProductUsedController::class);
-    Route::get('vendor/edit/{id}', [VendorController::class, 'edit'])->name('vendor.edit');
-    Route::put('vendor/update/{id}', [VendorController::class, 'update'])->name('vendor.update');
+
+Route::group(['prefix'=>'vendor','as'=>'vendor.','middleware' => ['auth', 'roles'], 'roles'=>['vendor']], function(){
+    Route::resource('brands', VendorBrandController::class);
+    Route::resource('orders', VenderOrderController::class);
+    Route::get('notificationsread', [VenderOrderController::class, 'notificationsread'])->name('notificationsread');
+    Route::resource('productoutgoing', VendorOutgoingController::class);
+    Route::resource('productused', VendorUsedProductController::class);
+    Route::get('/vendoredit/{id}', [VendorController::class, 'vendoredit'])->name('vendoredit');
+    Route::get('profile', [VendorsideController::class, 'profile'])->name('profile');
+    Route::put('/vendorupdate/{id}', [VendorController::class, 'vendorupdate'])->name('vendorupdate');
+    Route::resource('ordermanagement', OrderManagementController::class);
+    // Route::put('/confirmorder/{id}', [OrderManagementController::class, 'confirmorder'])->name('confirmorder');
+    Route::put('/updatestatus/{id}', [VenderOrderController::class, 'updatestatus'])->name('updatestatus');
+    Route::resource('exchangeorders', VendorExchangeController::class);
+    Route::put('updateexchange/{id}', [VendorExchangeController::class, 'updateexchange'])->name('updateexchange');
 });
 
 // Sign in with google

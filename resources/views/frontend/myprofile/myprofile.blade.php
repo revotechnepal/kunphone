@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="col-md-10">
                                         {{$user->email}}<br><br>
-                                        <a href="{{route('editinfo')}}" class="btn btn-info py-3 px-3">Edit Info</a>&nbsp;
+                                        <a href="{{route('editinfo')}}" class="btn btn-info py-3 px-3">&nbsp;&nbsp;Edit Info&nbsp;&nbsp;</a>&nbsp;
                                         <a href="{{route('sendotp')}}" class="btn btn-info py-3 px-3">Edit Password</a>
                                     </div>
                                 </div>

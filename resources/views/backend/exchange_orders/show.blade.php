@@ -38,7 +38,10 @@
                                         @php
                                             $vendor = DB::table('vendors')->where('id', $exchangeorder->vendor)->first();
                                         @endphp
-                                        <span style="font-weight: bold;">Appropriate Vendor: </span> {{$vendor->name}}, {{$vendor->address}}, {{$vendor->district}}
+                                        <span style="font-weight: bold;">Appropriate Vendor: </span> {{$vendor->name}}
+                                    </p>
+                                    <p>
+                                        <span style="font-weight: bold;">Vendor Address: </span> {{$vendor->address}}, {{$vendor->district}}
                                     </p>
 
                                     @if ($exchangeorder->is_processsing == 1)
@@ -50,8 +53,11 @@
                                         @endphp
 
                                         @if($initiatedinmilisec < $expiringdate)
+                                        @php
                                             DB::update('update exchange_confirms set is_processsing = 2 where id = ?', [$exchangeorder->id]);
                                             DB::update('update product_outgoings set quantity = quantity+1 where id = ?', [$exchangeorder->outgoingproduct_id]);
+                                        @endphp
+
                                             <p><span style="font-weight: bold;">Exchange Code: </span>  (Code Expired)</p>
                                         @else
                                             <p><span style="font-weight: bold;">Exchange Code: </span> {{$exchangeorder->exchangecode}}
@@ -68,17 +74,18 @@
                                             </p>
                                         @endif
                                             <p>
-                                                <span style="font-weight: bold;">Exchange Status:</span>Exchange Processing
+                                                <span style="font-weight: bold;">Exchange Status: </span>Exchange Processing
                                             </p>
                                         @elseif($exchangeorder->is_processsing == 2)
                                             <p><span style="font-weight: bold;">Exchange Code: </span> {{$exchangeorder->exchangecode}}</p>
                                             <p>
-                                                <span style="font-weight: bold;">Exchange Status:</span>Exchange Cancelled
+                                                <span style="font-weight: bold;">Exchange Status: </span>Exchange Cancelled
                                             </p>
                                         @elseif($exchangeorder->is_processsing == 0)
                                             <p><span style="font-weight: bold;">Exchange Code: </span> {{$exchangeorder->exchangecode}}</p>
                                             <p>
-                                                <span style="font-weight: bold;">Exchange Status:</span>Exchange Complete
+                                                <span style="font-weight: bold;">Exchange Status: </span>Exchange Complete&nbsp;
+                                                <a href="{{Storage::disk('uploads')->url($exchangeorder->warranty)}}" class="btn btn-primary" target="_blank">View Warranty Details</a>
                                             </p>
                                     @endif
 
@@ -115,7 +122,7 @@
                                                 <td><img src="{{Storage::disk('uploads')->url($exchangeorder->frontimage)}}" style="max-height:100px;" alt="">
                                                     <img src="{{Storage::disk('uploads')->url($exchangeorder->backimage)}}" style="max-height:100px;" alt=""></td>
                                                 <td>
-                                                    {{$exchangeorder->exchanging_product}}<br>
+                                                    <b>{{$incomingproduct->product->name}}</b><br>
                                                     ( {{$exchangeorder->product1_ram}} / {{$exchangeorder->product1_rom}} )
                                                 </td>
                                                 <td>
@@ -124,9 +131,6 @@
                                             </tr>
 
                                             <tr>
-                                                @php
-                                                    $outgoingproduct = DB::table('product_outgoings')->where('id', $exchangeorder->outgoingproduct_id)->first();
-                                                @endphp
                                                 <td style="font-weight: bold">Exchange With</td>
                                                 <td>
                                                     @if ($outgoingproduct->condition == 'new')
@@ -148,14 +152,19 @@
 
                                                 {{-- <td><img src="{{Storage::disk('uploads')->url($product1->modelimage)}}" style="max-height:100px;" alt=""></td> --}}
                                                 <td>
-                                                    {{$exchangeorder->exchanged_product}}<br>
-                                                    ( {{$exchangeorder->product1_ram}} / {{$exchangeorder->product1_rom}} )
+                                                    <b>{{$outgoingproduct->product->name}}</b><br>
+                                                    ( {{$exchangeorder->product1_ram}} / {{$exchangeorder->product1_rom}} )<br>
+                                                    @if ($outgoingproduct->condition == 'new')
+                                                        (New Phone)
+                                                    @elseif($outgoingproduct->condition == 'used')
+                                                        (Used Phone)<br>
+                                                        SKU: {{$outgoingproduct->sku}}
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     Rs. {{$exchangeorder->product2_price}}
                                                 </td>
                                             </tr>
-
 
                                             <tr>
                                                 <td colspan="3" class="text-right" style="font-weight: bold;">Price Difference:</td>
@@ -168,7 +177,7 @@
                                                         <form action="{{route('admin.exchangeconfirm.update', $exchangeorder->id)}}" method="POST">
                                                             @csrf
                                                             @method('PUT')
-                                                            <button type="submit" class="btn btn-success">Exchange Done</button>
+                                                            <button type="submit" class="btn btn-danger">Cancel Exchange</button>
                                                         </form>
 
                                                     @endif

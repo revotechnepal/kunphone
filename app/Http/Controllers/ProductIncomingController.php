@@ -169,7 +169,7 @@ class ProductIncomingController extends Controller
 
     public function notificationsread()
     {
-        $incomingproduct = DB::table('notifications')->get();
+        $incomingproduct = DB::table('notifications')->where('vendor_id', null)->get();
         foreach ($incomingproduct as $product) {
             DB::update('update notifications set is_read = 1 where id = ?', [$product->id]);
         }

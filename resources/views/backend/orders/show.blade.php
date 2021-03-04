@@ -37,7 +37,6 @@
                                     <p><span style="font-weight: bold;">Ordered Date: </span> {{date('F d, Y', strtotime($order->created_at))}}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><span style="font-weight: bold;">Order Status: </span>{{$order->orderStatus->status}}</p>
                                     <p><span style="font-weight: bold;">Total Price: </span>Rs.{{$order->payment->price}}</p>
                                     <p><span style="font-weight: bold;">Payment Method: </span>
                                         @if ($order->payment->method == 'cash')
@@ -241,11 +240,11 @@
                                             <div class="form-group row">
                                                 <label for="orderstatus" class="col-sm-3">Order Status</label>
                                                 <div class="col-sm-4">
-                                                    <select name="orderstatus" class="form-control">
+                                                    {{-- <select name="orderstatus" class="form-control">
                                                         @foreach ($orderstatuses as $orderstatus)
                                                         <option value="{{$orderstatus->id}}" {{$orderstatus->id == $order->order_status_id ? 'selected' : ''}}>{{$orderstatus->status}}</option>
                                                         @endforeach
-                                                    </select>
+                                                    </select> --}}
                                                     <div class="form-group">
                                                         <textarea name="canceldescription"  cols="30" rows="10" class="form-control" placeholder="Fill the reason only if you are canceling order or leave blank"></textarea>
                                                     </div>

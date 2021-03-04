@@ -40,8 +40,8 @@
                                             <tr>
                                                 <td style="font-weight: bold">Your Product</td>
                                                 <td>
-                                                    <a href="http://phone.revonepal.com/public/uploads/{{$incomingproduct->frontimage}}" target="_blank"><img src="{{Storage::disk('uploads')->url($incomingproduct->frontimage)}}" alt="" style="max-height: 100px;;"></a>
-                                                    <a href="http://phone.revonepal.com/public/uploads/{{$incomingproduct->backimage}}" target="_blank"><img src="{{Storage::disk('uploads')->url($incomingproduct->backimage)}}" alt="" style="max-height: 100px;;"></a>
+                                                    <a href="{{Storage::disk('uploads')->url($incomingproduct->frontimage)}}" target="_blank"><img src="{{Storage::disk('uploads')->url($incomingproduct->frontimage)}}" alt="" style="max-height: 100px;;"></a>
+                                                    <a href="{{Storage::disk('uploads')->url($incomingproduct->backimage)}}" target="_blank"><img src="{{Storage::disk('uploads')->url($incomingproduct->backimage)}}" alt="" style="max-height: 100px;;"></a>
                                                 </td>
                                                 <td>
                                                     {{$exchangingproduct->name}}<br>
@@ -89,9 +89,13 @@
                                                 <td colspan="4" style="font-weight: bold;">Choose a vendor to exchange from:
                                                     <div class="form-group">
                                                         <select name="vendor" id="">
+                                                            <option value="">--Select a vendor--</option>
                                                             @foreach ($vendors as $vendor)
                                                                 <option value="{{$vendor->id}}">{{$vendor->name}}, {{$vendor->address}}, {{$vendor->district}}</option>
                                                             @endforeach
+                                                            @error('vendor')
+                                                                <p class="text-danger">{{$message}}</p>
+                                                            @enderror
                                                         </select>
                                                     </div>
                                                 </td>

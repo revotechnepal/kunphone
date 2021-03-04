@@ -67,7 +67,7 @@
                 <div class="cw-item">
                     <div class="ci-text">
                         <span>Phone:</span>
-                        <p><span class="icon icon-phone"></span> +977 {{$setting->phone}}</p>
+                        <p><span class="icon icon-phone"></span> +977 01-{{$setting->phone}}</p>
                     </div>
                 </div>
                 <div class="cw-item">

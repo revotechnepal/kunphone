@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DelieveryAddress;
 use App\Models\Order;
 use App\Models\OrderedProduct;
-use App\Models\Payment;
 use App\Models\ProductOutgoing;
 use Illuminate\Http\Request;
 
@@ -121,32 +119,34 @@ class OrderManagementController extends Controller
         if($orderscount == 1)
         {
             $order = Order::findorFail($orderproduct->order_id);
-            $delieveryaddress = DelieveryAddress::findorFail($order->delievery_address_id);
-            $payment = Payment::findorFail($order->payment_id);
+            $orderproduct->update([
+                'order_status_id' => 6
+            ]);
 
-            $delieveryaddress->delete();
-            $payment->delete();
-            $order->delete();
-            $orderproduct->delete();
-
-            return redirect()->route('admin.order.index')->with('success', 'Product Removed from order successfully.');
+            return redirect()->back()->with('success', 'Product is cancelled from order successfully.');
         }
         else{
-            $orderproduct->delete();
-            return redirect()->back()->with('success', 'Product Removed from order successfully.');
+            $orderproduct->update([
+                'order_status_id' => 6
+            ]);
+            return redirect()->back()->with('success', 'Product is cancelled from order successfully.');
         }
     }
 
     public function confirmorder(Request $request, $id)
     {
-        $data = $this->validate($request, [
-            'gtotal' => 'required',
+        $orderedproduct = OrderedProduct::findorFail($id);
+        $orderedproduct->update([
+            'order_status_id' => 5
         ]);
-        $payment = Payment::findorFail($id);
-        $payment->update([
-            'price' => $data['gtotal'],
-        ]);
+        // $data = $this->validate($request, [
+        //     'gtotal' => 'required',
+        // ]);
+        // $payment = Payment::findorFail($id);
+        // $payment->update([
+        //     'price' => $data['gtotal'],
+        // ]);
 
-        return redirect()->back()->with('success', 'Order has been confirmed.');
+        return redirect()->back()->with('success', 'Order has been delievered.');
     }
 }

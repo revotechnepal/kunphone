@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class FrontController extends Controller
@@ -457,7 +458,6 @@ class FrontController extends Controller
 
             $order = Order::create([
                 'user_id' => Auth::user()->id,
-                'order_status_id' => 1,
                 'delievery_address_id' => $delieveryaddress['id'],
                 'payment_id' => $payment['id'],
             ]);
@@ -471,6 +471,8 @@ class FrontController extends Controller
                     'product_id' => $cartproduct->id,
                     'quantity' => $product->quantity,
                     'price' => $cartproduct->price,
+                    'order_status_id' => 1,
+                    'vendor_id' => $cartproduct->vendor_id,
                 ]);
 
                 $newquantity = $cartproduct->quantity - $product->quantity;
@@ -481,8 +483,17 @@ class FrontController extends Controller
 
                 $orderedProduct->save();
                 $product->delete();
+                $orderedProduct->notify(new NewOrderNotification($orderedProduct));
+                $orderedProduct->notify(new NewOrderNotification($orderedProduct));
+                $neworder = DB::table('notifications')->where('type','App\Notifications\NewOrderNotification')->latest()->first();
+                DB::update('update notifications set vendor_id = ? where id = ?', [$cartproduct->vendor_id, $neworder->id]);
+
+                $vendor = Vendor::where('id', $cartproduct->vendor_id)->first();
+                $product = Product::where('id', $cartproduct->product_id)->first();
+                $email = $vendor->email;
+
+                MailController::vendoremail($product, $vendor, $email);
             }
-            $order->notify(new NewOrderNotification($order));
             return redirect()->route('index')->with('success', 'Thank you for ordering. We will get back to you soon.');
         }
     }
@@ -653,6 +664,14 @@ class FrontController extends Controller
         ]);
         $exchangeorder->save();
         $exchangeorder->notify(new ExchangeOrderNotification($exchangeorder));
+        $exchangeorder->notify(new ExchangeOrderNotification($exchangeorder));
+        $neworder = DB::table('notifications')->where('type','App\Notifications\ExchangeOrderNotification')->latest()->first();
+        DB::update('update notifications set vendor_id = ? where id = ?', [$data['vendor'], $neworder->id]);
+
+        $vendor = Vendor::where('id', $data['vendor'])->first();
+        $email = $vendor->email;
+
+        MailController::vendorexchangeemail($vendor, $email);
 
         $newquantity = $outgoingproduct->quantity - 1;
         $outgoingproduct->update([
@@ -877,33 +896,29 @@ class FrontController extends Controller
 
     public function cancelorder(Request $request, $id)
     {
-        $order = Order::findorfail($id);
-            if($order->order_status_id == 1 || $order->order_status_id == 2 || $order->order_status_id == 3){
+        $orderproduct = OrderedProduct::findorfail($id);
+            if($orderproduct->order_status_id == 1 || $orderproduct->order_status_id == 2 || $orderproduct->order_status_id == 3){
                 $data = $this->validate($request, [
                     'reason' => 'required',
                 ]);
-                $order->update([
+                $orderproduct->update([
                     'order_status_id' => 6,
                 ]);
                 $description = 'Cancelled By: '.Auth()->user()->name.'<br> Reason behind Cancellation:'.$data['reason'];
                 $cancellation = Cancelorder::create([
-                    'order_id' => $order->id,
+                    'order_id' => $orderproduct->id,
                     'description' => $description,
                 ]);
                 $cancellation->save();
 
-                $orderedproducts = OrderedProduct::where('order_id', $order->id)->get();
-                foreach($orderedproducts as $orderedproduct)
-                {
-                    $outgoingproduct = ProductOutgoing::where('id', $orderedproduct->product_id)->first();
+                $outgoingproduct = ProductOutgoing::where('id', $orderproduct->product_id)->first();
 
-                    $newquantity = $outgoingproduct->quantity + $orderedproduct->quantity;
-                    $outgoingproduct->update([
-                        'quantity' => $newquantity,
-                    ]);
-                }
-                return redirect()->back()->with('success', 'Cancellation successful.');
-            }
+                $newquantity = $outgoingproduct->quantity + $orderproduct->quantity;
+                $outgoingproduct->update([
+                    'quantity' => $newquantity,
+                ]);
+            return redirect()->back()->with('success', 'Cancellation successful.');
+        }
     }
 
     public function incomingquestions(Request $request, $id)

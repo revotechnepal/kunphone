@@ -23,7 +23,7 @@ class ProductOutgoingController extends Controller
     {
         //
         if ($request->ajax()) {
-            
+
             if(Auth::user()->role_id == 4)
             {
                 $vendor = Vendor::where('name', Auth::user()->name)->first();
@@ -31,7 +31,7 @@ class ProductOutgoingController extends Controller
             }
             else
             {
-                $data = ProductOutgoing::latest()->where('quantity', '>', 0)->where('condition', 'new')->get();   
+                $data = ProductOutgoing::latest()->where('quantity', '>', 0)->where('condition', 'new')->get();
             }
 
             return DataTables::of($data)
@@ -122,6 +122,7 @@ class ProductOutgoingController extends Controller
                 }
             }
             if($variantexists == 1){
+
                 $exists = ProductOutgoing::where('product_id', $product->id)
                                 ->where('ram', $data['ram'])
                                 ->where('rom', $data['rom'])
@@ -129,7 +130,8 @@ class ProductOutgoingController extends Controller
                                 ->where('condition', 'new')
                                 ->where('accessories', $data['accessories'])
                                 ->where('color', $data['color'])
-                                ->where('brand_id', $product->brand_id)->first();
+                                ->where('brand_id', $product->brand_id)
+                                ->where('vendor_id', $data['vendor'])->first();
                     if($exists){
                         $newquantity = $exists->quantity + $data['quantity'];
                         $featured = '';
@@ -151,7 +153,7 @@ class ProductOutgoingController extends Controller
                             'is_featured' => $featured,
                             'vendor_id' => $data['vendor']
                         ]);
-                        return redirect()->route('admin.productoutgoing.index')->with('success', 'Product Quantity Increased');
+                        return redirect()->route('admin.productoutgoing.index')->with('success', 'Product added successfully.');
                     }
                     else{
                         $featured = '';
@@ -175,7 +177,7 @@ class ProductOutgoingController extends Controller
                         ]);
 
                         $productoutgoing->save();
-                        return redirect()->route('admin.productoutgoing.index')->with('success', 'Product Added Successfully');
+                        return redirect()->route('admin.productoutgoing.index')->with('success', 'Product Added Successfully.');
                     }
             }
             else{

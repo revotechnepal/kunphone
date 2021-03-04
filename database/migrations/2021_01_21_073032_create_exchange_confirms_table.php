@@ -30,6 +30,7 @@ class CreateExchangeConfirmsTable extends Migration
             $table->string('frontimage');
             $table->string('backimage');
             $table->integer('is_processsing')->nullable();
+            $table->string('warranty')->nullable();
             $table->timestamps();
         });
     }

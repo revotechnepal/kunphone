@@ -51,7 +51,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    
+
                                     @if ($productoutgoing->condition == 'new')
 
                                     @elseif($productoutgoing->condition == 'used')
@@ -84,7 +84,7 @@
                                 <div class="col-md-5">
                                     <h3>Uploaded Images</h3>
                                     @foreach ($productimages as $productimage)
-                                        <a href="http://127.0.0.1:8000/uploads/{{$productimage->modelimage}}" target="_blank"><img src="{{Storage::disk('uploads')->url($productimage->modelimage)}}" alt="" style="max-height: 120px; padding: 3px 3px;"></a>
+                                        <a href="{{Storage::disk('uploads')->url($productimage->modelimage)}}" target="_blank"><img src="{{Storage::disk('uploads')->url($productimage->modelimage)}}" alt="" style="max-height: 120px; padding: 3px 3px;"></a>
                                     @endforeach
                                 </div>
                             </div>

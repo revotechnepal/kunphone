@@ -26,7 +26,6 @@
                                 <th class="text-center">No</th>
                                 <th class="text-center">Model Image</th>
                                 <th class="text-center">Name</th>
-                                <th class="text-center">Color</th>
                                 <th class="text-center">RAM</th>
                                 <th class="text-center">ROM</th>
                                 <th class="text-center">SKU</th>
@@ -58,7 +57,6 @@
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'modelimage', name: 'modelimage'},
               {data: 'name', name: 'name'},
-              {data: 'color', name: 'color'},
               {data: 'ram', name: 'ram'},
               {data: 'rom', name: 'rom'},
               {data: 'sku', name: 'sku'},

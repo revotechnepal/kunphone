@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\CustomerEmail;
 use App\Mail\NotifyUserMail;
 use App\Mail\PasswordChange;
+use App\Mail\VendorEmail;
+use App\Mail\VendorExchangeEmail;
 use App\Mail\VerifyUserEmail;
 use App\Models\Setting;
 use App\Models\User;
@@ -55,7 +57,6 @@ class MailController extends Controller
         return redirect()->back()->with('success', 'Thank you for messaging us. We will get back to you soon.');
     }
 
-
     public function sendEmail() {
         $user = User::findorFail(Auth::user()->id);
         $title = $user->name;
@@ -71,7 +72,28 @@ class MailController extends Controller
         ];
 
         Mail::to($email)->send(new PasswordChange($mailData));
-        $setting = Setting::first();
-        return view('frontend.myprofile.otpconfirmation', compact('setting'));
+        if (Auth::user()->role_id == 3) {
+            $setting = Setting::first();
+            return view('frontend.myprofile.otpconfirmation', compact('setting'));
+        }
+    }
+
+    public static function vendoremail($product, $vendor, $email)
+    {
+        $mailData = [
+            'product_name' => $product->name,
+            'vendor_name' => $vendor->name,
+        ];
+
+        Mail::to($email)->send(new VendorEmail($mailData));
+    }
+
+    public static function vendorexchangeemail($vendor, $email)
+    {
+        $mailData = [
+            'vendor_name' => $vendor->name,
+        ];
+
+        Mail::to($email)->send(new VendorExchangeEmail($mailData));
     }
 }

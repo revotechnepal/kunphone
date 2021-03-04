@@ -28,6 +28,14 @@
                     </button>
                 </div>
             @endif
+            @if(session()->has('failure'))
+                <div class="alert alert-danger">
+                    {{ session()->get('failure') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <h2 class="mb-3">View Brands <a href="{{route('admin.brand.create')}}" class="btn btn-primary btn-sm"> <i class="fa fa-plus" aria-hidden="true"></i> Create Brand</a></h2>
             <div class="panel">
                 <div class="panel-body table-responsive">

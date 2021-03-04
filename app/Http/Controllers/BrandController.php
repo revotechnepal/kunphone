@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Storage;
@@ -169,8 +170,14 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $brand = Brand::findorFail($id);
-        Storage::disk('uploads')->delete($brand->logo);
-        $brand->delete();
-        return redirect()->back()->with('success', 'Brand Successfully Deleted');
+        $product = Product::where('brand_id', $id)->first();
+        if ($product) {
+            return redirect()->back()->with('failure', 'Cannot delete as there are products under this brand.');
+        }else
+        {
+            Storage::disk('uploads')->delete($brand->logo);
+            $brand->delete();
+            return redirect()->back()->with('success', 'Brand Successfully Deleted');
+        }
     }
 }

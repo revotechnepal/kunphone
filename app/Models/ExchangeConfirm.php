@@ -27,10 +27,12 @@ class ExchangeConfirm extends Model
        'frontimage',
        'backimage',
        'is_processsing',
+       'warranty',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
 }
