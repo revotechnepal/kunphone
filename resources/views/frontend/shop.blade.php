@@ -91,14 +91,14 @@
                             </div>
                         @endforeach
 		    		</div>
-		    	<div class="row mt-5">
-		          <div class="col text-center">
-		            <div class="block-27">
-                      {{$productoutgoing->links()}}
+                    <div class="row mt-5">
+                        <div class="col text-center">
+                            <div class="block-27">
+                            {{$productoutgoing->links()}}
 
-		            </div>
-		          </div>
-		        </div>
+                            </div>
+                        </div>
+                    </div>
 		    	</div>
 
 		    	<div class="col-md-4 col-lg-2">

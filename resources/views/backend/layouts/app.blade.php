@@ -5,6 +5,7 @@
 	<title>KunPhone | Dashboard </title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}">
@@ -270,6 +271,16 @@
                                     <li><a href="{{route('admin.orderedproducts.index')}}" class="">View Product Orders</a></li>
                                     {{-- <li><a href="{{route('admin.order.index')}}" class="">View Orders</a></li> --}}
                                     <li><a href="{{route('admin.exchangeconfirm.index')}}" class="">View Exchange Orders</a></li>
+								</ul>
+							</div>
+                        </li>
+
+                        <li>
+							<a href="#subPaged3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-layers"></i><span>Blogs</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPaged3" class="collapse ">
+								<ul class="nav">
+                                    <li><a href="{{route('admin.blogcategory.index')}}" class="">Blog Categories</a></li>
+                                    <li><a href="{{route('admin.blog.index')}}" class="">Our Blogs</a></li>
 								</ul>
 							</div>
                         </li>

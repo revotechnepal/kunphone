@@ -40,16 +40,16 @@
     .clicked a{
         color: white;
     }
-            
+
     div.stars {
     width: 270px;
     display: inline-block
     }
-    
+
     input.star {
         display: none
     }
-    
+
     label.star {
         float: right;
         padding: 10px;
@@ -57,50 +57,67 @@
         color: gray;
         transition: all .2s
     }
-    
+
     input.star:checked~label.star:before {
         content: '\2605';
         color: #FD4;
         transition: all .25s;
     }
-    
+
     input.star-5:checked~label.star:before {
         color: #FE7;
         text-shadow: 0 0 20px #952
     }
-    
+
     input.star-1:checked~label.star:before {
         color: #F62
     }
-    
+
     label.star:hover {
         transform: rotate(-15deg) scale(1.3)
     }
-    
+
     label.star:before {
         content: '\2605';
     }
-    
+
     .edited {
         color: white;
         background: rgb(155, 151, 151);
     }
-    
+
     .linkedited {
         color: rgb(88, 88, 255);
     }
-    
+
     .linkedited:hover {
         color: rgb(88, 88, 255);
     }
-    
+
     .new {
         background: white;
         border-radius: 0px;
     }
-    
-    </style>
 
+    </style>
+    <style>
+        .inlineblock{
+            display: inline-block;
+        }
+        .numb{
+            background-color: black;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 20px;
+            display: inline-block;
+            font-weight: 800;
+        }
+        a.title{
+            color: black;
+            font-size: 15px;
+            font-weight: 700;
+        }
+    </style>
 
     @stack('styles')
   </head>

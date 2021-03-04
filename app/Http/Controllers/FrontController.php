@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\BlogCategory;
 use App\Models\Brand;
 use App\Models\Cancelorder;
 use App\Models\Cart;
@@ -1045,5 +1047,49 @@ class FrontController extends Controller
         SEOMeta::setTitle('KunPhone');
         $setting = Setting::first();
         return view('frontend.termsandconditions', compact('setting'));
+    }
+
+    public function blogs()
+    {
+        SEOMeta::setTitle('KunPhone');
+        $setting = Setting::first();
+        $sliderblogs = Blog::latest()->orderBy('id', 'DESC')->take(5)->get();
+        $allblogs = Blog::latest()->simplePaginate(9);
+        $allcategories = BlogCategory::orderBy('slug', 'ASC')->get();
+        $popularblogs = Blog::orderBy('view_count', 'DESC')->take(5)->get();
+
+        return view('frontend.blogs', compact('setting', 'sliderblogs', 'allblogs', 'allcategories', 'popularblogs'));
+    }
+
+    public function categoryblogs($slug)
+    {
+        SEOMeta::setTitle('KunPhone');
+        $setting = Setting::first();
+        $popularblogs = Blog::orderBy('view_count', 'DESC')->take(5)->get();
+        $currentcategory = BlogCategory::where('slug', $slug)->first();
+        $sliderblogs = Blog::latest()->orderBy('id', 'DESC')->take(5)->get();
+        $categoryblogs = Blog::whereJsonContains('category', "$currentcategory->id")->simplePaginate(9);
+        $allcategories = BlogCategory::latest()->orderBy('slug', 'ASC')->get();
+
+        return view('frontend.categoryblogs', compact('setting', 'sliderblogs', 'allcategories', 'categoryblogs', 'currentcategory', 'popularblogs'));
+    }
+
+    public function viewblog($id)
+    {
+        SEOMeta::setTitle('KunPhone');
+        $setting = Setting::first();
+        $currentblog = Blog::where('id', $id)->first();
+        $view_count = $currentblog->view_count;
+        $view_count += 1;
+        $currentblog->update([
+            'view_count'=>$view_count,
+        ]);
+
+        //$sliderblogs = Blog::latest()->orderBy('id', 'DESC')->take(5)->get();
+        //$allblogs = Blog::latest()->simplePaginate(9);
+        $allcategories = BlogCategory::orderBy('slug', 'ASC')->get();
+        $popularblogs = Blog::orderBy('view_count', 'DESC')->take(5)->get();
+
+        return view('frontend.viewblog', compact('setting', 'allcategories', 'popularblogs', 'currentblog'));
     }
 }

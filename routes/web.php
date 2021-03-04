@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ExchangeConfirmController;
 use App\Http\Controllers\ExchangeOrderController;
@@ -123,6 +125,15 @@ Route::get('/policy',[FrontController::class, 'policy'])->name('policy');
 Route::get('/termsandconditions',[FrontController::class, 'termsandconditions'])->name('termsandconditions');
 
 
+//Blogs
+Route::get('/blogs',[FrontController::class, 'blogs'])->name('blogs');
+Route::get('/categoryblogs/{slug}',[FrontController::class, 'categoryblogs'])->name('categoryblogs');
+Route::get('/viewblog/{id}',[FrontController::class, 'viewblog'])->name('viewblog');
+
+
+
+
+
 // Route::get('/dashboard', [FrontController::class, 'dashboard'])->name('dashboard');
 Route::get('/home', function () {
     if(Auth::user()->role_id == 3){
@@ -186,6 +197,8 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware' => ['auth', 'roles']
     Route::resource('exchangeconfirm', ExchangeConfirmController::class);
     Route::resource('faqs', FaqController::class);
     Route::resource('orderedproducts', OrderedProductController::class);
+    Route::resource('blogcategory', BlogCategoryController::class);
+    Route::resource('blog', BlogController::class);
 });
 
 Route::group(['prefix'=>'vendor','as'=>'vendor.','middleware' => ['auth', 'roles'], 'roles'=>['vendor']], function(){
