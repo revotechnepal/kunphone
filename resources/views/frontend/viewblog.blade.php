@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-md-4">
                             <p>{{$currentblog->authorname}}<br>
-                            Posted on: {{date('F, Y h:m a')}}</p>
+                            Posted on: {{date('F j, Y h:i a', strtotime($currentblog->date))}}</p>
                         </div>
 
                     </div>
