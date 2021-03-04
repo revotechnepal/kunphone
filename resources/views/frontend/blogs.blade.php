@@ -126,14 +126,7 @@
                                             $no = 1;
                                         @endphp
                                         @foreach ($popularblogs as $popular)
-                                        {{-- <div class="row"> --}}
-                                            {{-- <div class="col-md-2" style="background: black">
-                                                <p style="color: white; margin-left: -5px;">{{$no++}}</p>
-                                            </div> --}}
-                                            {{-- <div class="col-md-10"> --}}
                                                 <a href="{{route('viewblog', $popular->id)}}"><p><span style="background: black; color:white; font-size: 20px; padding: 1px 8px 1px 8px">{{$no++}}</span> <u>{{$popular->title}}</u></p></a>
-                                            {{-- </div> --}}
-                                        {{-- </div> --}}
 
                                         @endforeach
                                     </h4>

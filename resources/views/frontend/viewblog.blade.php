@@ -18,7 +18,7 @@
 <section id="home-section" class="hero">
     <div class="hero-wrap hero-bread" style="margin-top: -110px; padding: 12em 0 0 0; text-align:center">
         {{-- <div class="pre-content-html" style="height:450px;max-width:1200px;position:relative" data-spm-anchor-id="a2a0e.12811.0.i1.1db73255HWff1t"> --}}
-            <img src="{{Storage::disk('uploads')->url($currentblog->image)}}" style="width: 90%; max-height: 500px;" alt="Blog Photo">
+            <img src="{{Storage::disk('uploads')->url($currentblog->image)}}" style="width: 90%; object-fit: cover; max-height: 500px;" alt="Blog Photo">
         {{-- </div> --}}
     </div>
 </section>
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="sidebar-box-2">
+                        {{-- <div class="sidebar-box-2">
                             <h2 class="heading">Popular Blogs</h2>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -88,12 +88,23 @@
                                     </h4>
                                 </div>
                             </div>
-                            {{-- @foreach ($popularblogs as $popular) --}}
-                            {{-- <div class="row">
-                                <div class="col-xs-1"><p>1</p></div>
-                                <div class="col-xs-11"><a href="" class="title">Rame is a good boy</a></div>
-                            </div> --}}
-                            {{-- @endforeach --}}
+
+                        </div> --}}
+                        <div class="sidebar-box-2">
+                            <h2 class="heading">Popular Blogs</h2>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @foreach ($popularblogs as $popular)
+                                                <a href="{{route('viewblog', $popular->id)}}"><p><span style="background: black; color:white; font-size: 20px; padding: 1px 8px 1px 8px">{{$no++}}</span> <u>{{$popular->title}}</u></p></a>
+
+                                        @endforeach
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

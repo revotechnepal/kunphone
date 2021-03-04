@@ -1050,12 +1050,13 @@ class FrontController extends Controller
     {
         SEOMeta::setTitle('KunPhone');
         $setting = Setting::first();
+        $popularblogs = Blog::orderBy('view_count', 'DESC')->take(5)->get();
         $currentcategory = BlogCategory::where('slug', $slug)->first();
         $sliderblogs = Blog::latest()->orderBy('id', 'DESC')->take(5)->get();
         $categoryblogs = Blog::whereJsonContains('category', "$currentcategory->id")->simplePaginate(9);
         $allcategories = BlogCategory::latest()->orderBy('slug', 'ASC')->get();
 
-        return view('frontend.categoryblogs', compact('setting', 'sliderblogs', 'allcategories', 'categoryblogs', 'currentcategory'));
+        return view('frontend.categoryblogs', compact('setting', 'sliderblogs', 'allcategories', 'categoryblogs', 'currentcategory', 'popularblogs'));
     }
 
     public function viewblog($id)

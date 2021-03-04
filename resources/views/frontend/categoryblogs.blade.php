@@ -85,6 +85,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="sidebar-box-2">
+                            <h2 class="heading">Popular Blogs</h2>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @foreach ($popularblogs as $popular)
+                                                <a href="{{route('viewblog', $popular->id)}}"><p><span style="background: black; color:white; font-size: 20px; padding: 1px 8px 1px 8px">{{$no++}}</span> <u>{{$popular->title}}</u></p></a>
+
+                                        @endforeach
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
