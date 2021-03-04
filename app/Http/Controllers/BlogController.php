@@ -41,7 +41,7 @@ class BlogController extends Controller
                     return $category;
                 })
                 ->addColumn('date', function ($row) {
-                    $date = date('Y/m/d h:m a', strtotime($row->date));
+                    $date = date('Y/m/d h:i a', strtotime($row->date));
                     return $date;
                 })
                 ->addColumn('action', function($row){
