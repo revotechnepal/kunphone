@@ -26,6 +26,7 @@ class CreateProductOutgoingsTable extends Migration
             $table->integer('brand_id');
             $table->string('sku')->nullable();
             $table->integer('vendor_id')->nullable();
+            $table->longText('details')->nullable();
             $table->timestamps();
         });
     }
