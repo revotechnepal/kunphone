@@ -130,9 +130,8 @@ Route::get('/blogs',[FrontController::class, 'blogs'])->name('blogs');
 Route::get('/categoryblogs/{slug}',[FrontController::class, 'categoryblogs'])->name('categoryblogs');
 Route::get('/viewblog/{id}',[FrontController::class, 'viewblog'])->name('viewblog');
 
-
-
-
+//Phone Search
+Route::get('/search/{slug}', [FrontController::class, 'search'])->name('search');
 
 // Route::get('/dashboard', [FrontController::class, 'dashboard'])->name('dashboard');
 Route::get('/home', function () {

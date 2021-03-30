@@ -1092,4 +1092,16 @@ class FrontController extends Controller
 
         return view('frontend.viewblog', compact('setting', 'allcategories', 'popularblogs', 'currentblog'));
     }
+
+    public function search($slug)
+    {
+        SEOMeta::setTitle('KunPhone');
+        $brands = Brand::orderBy('name','ASC')->get();
+        $product = Product::where('slug', $slug)->first();
+        $products = ProductOutgoing::latest()->where('quantity', '>', 0)->where('product_id', $product->id)->simplePaginate(9);
+        // dd();
+        $setting = Setting::first();
+        return view('frontend.search', compact('setting', 'brands', 'product', 'products'));
+    }
 }
+
